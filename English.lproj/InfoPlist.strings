@@ -1,0 +1,6 @@
+/* Localized versions of Info.plist keys */
+
+CFBundleName = "NevitColorizer";
+CFBundleShortVersionString = "1.0";
+CFBundleGetInfoString = "NevitColorizer version 1.0, Copyright (c) 2016 Serdar Coskun.";
+NSHumanReadableCopyright = "Copyright (c) 2016 Serdar Coskun.";
