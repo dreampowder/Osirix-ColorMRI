@@ -93,8 +93,7 @@ static NSString* const identifier = @"CELL";
     NSNumber* key = _seriesDictionary.allKeys[selectedRow];
     NSMutableArray* array = _seriesDictionary[key];
     self.selectedImageArray = array;
-//    NSRunInformationalAlertPanel(@"Select!", [NSString stringWithFormat:@"Selected: %li",selectedRow], @"ok", 0L, 0L);
-    [self.collectionView reloadData];
+    [self didClickSelectSetButton:self];
 }
 
 #pragma mark <JNWCollectionViewDataSource>
@@ -148,14 +147,18 @@ static NSString* const identifier = @"CELL";
     
     for (DicomSeries* series in self.selectedImageArray) {
         NSMenuItem* item1 = [[NSMenuItem alloc] initWithTitle:series.name action:@selector(didSelectMenuItem:) keyEquivalent:@"red"];
+        [item1 setImage:series.thumbnailImage];
         NSMenuItem* item2 = [[NSMenuItem alloc] initWithTitle:series.name action:@selector(didSelectMenuItem:) keyEquivalent:@"green"];
+        [item2 setImage:series.thumbnailImage];
         
         NSMenuItem* item3 = [[NSMenuItem alloc] initWithTitle:series.name action:@selector(didSelectMenuItem:) keyEquivalent:@"blue"];
+        [item3 setImage:series.thumbnailImage];
 
         [self.btnRed.menu addItem:item1];
         [self.btnGreen.menu addItem:item2];
         [self.btnBlue.menu addItem:item3];
     }
+    self.btnRed.menu.title = @"Red Channel";
     [self.btnRed selectItem:self.btnRed.menu.itemArray[0]];
     [self.btnGreen selectItem:self.btnRed.menu.itemArray[1]];
     [self.btnBlue selectItem:self.btnRed.menu.itemArray[2]];

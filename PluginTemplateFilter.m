@@ -24,9 +24,8 @@
     
     
 
-    ViewerController    *new2DViewer;
-
-    new2DViewer = [self duplicateCurrent2DViewerWindow];
+//    ViewerController    *new2DViewer;
+//    new2DViewer = [self duplicateCurrent2DViewerWindow];
 
     //Here we are trying to decide which series are eligable for putting into RGB Channels.
     //Image series are grouped by their image count, and if there are more than or equal to 3 image sets with same count
@@ -59,8 +58,9 @@
     self.windowImageSelector = [[ImageSetSelector alloc] initWithSeriesDictionary:possibleSeries];
     self.windowImageSelector.delegate = self;
     [self.viewerWindow.window beginSheet:self.windowImageSelector.window completionHandler:nil];
-    if( new2DViewer) return 0; // No Errors
-    else return -1;
+//    if( new2DViewer) return 0; // No Errors
+//    else return -1;
+    return 0;
 }
 
 //- (long) filterImage:(NSString*) menuName
