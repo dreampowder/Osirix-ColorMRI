@@ -21,6 +21,6 @@
 
 @property (strong) id<ImageSetSelectorDelegate> delegate;
 
--(instancetype)initWithSeriesDictionary:(NSDictionary<NSNumber*,NSMutableArray*>*)seriesDicitonary;
+-(instancetype)initWithSeriesArray:(NSArray<DicomSeries*>*)seriesArray;
 
 @end

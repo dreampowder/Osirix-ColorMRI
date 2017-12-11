@@ -6,18 +6,9 @@
 //
 
 #import "ImageSetSelector.h"
-
-#import <JNWCollectionViewCell.h>
-#import <JNWCollectionView.h>
-#import "GridCell.h"
-
-
 #import <Accelerate/Accelerate.h>
 
-@interface ImageSetSelector ()<NSTableViewDelegate,NSTableViewDataSource,JNWCollectionViewDataSource,JNWCollectionViewGridLayoutDelegate>
-
-@property (strong) IBOutlet NSTableView* seriesTable;
-@property (strong) IBOutlet JNWCollectionView* collectionView;
+@interface ImageSetSelector ()
 
 @property (strong) IBOutlet NSImageView* imgRed;
 @property (strong) IBOutlet NSImageView* imgGreen;
@@ -31,11 +22,10 @@
 @property (strong) IBOutlet NSButton* btnSelectSet;
 @property (strong) IBOutlet NSButton* btnApplyColors;
 
-@property (strong) NSDictionary<NSNumber*,NSMutableArray*>* seriesDictionary;
 
-@property (strong) NSMutableArray* selectedImageArray;
 
-- (IBAction)didClickSelectSetButton:(id)sender;
+@property (strong) NSArray<DicomSeries*>* seriesArray;
+
 - (IBAction)didClickDoneButton:(id)sender;
 
 @property (strong) DicomSeries* redSeries;
@@ -44,89 +34,34 @@
 
 @end
 
-static NSString* ID_CELL_SERIES = @"ImageSetColumn";
-static NSString* ID_CELL_COUNT = @"ImageCountColumn";
-static NSString* const identifier = @"CELL";
-
 @implementation ImageSetSelector
 
--(instancetype)initWithSeriesDictionary:(NSDictionary<NSNumber*,NSMutableArray*>*)seriesDicitonary{
+-(instancetype)initWithSeriesArray:(NSArray<DicomSeries*>*)seriesArray{
     self = [super initWithWindowNibName:@"ImageSetSelector"];
-    if (self){
-        self.seriesDictionary = seriesDicitonary;
+    if (self) {
+        self.seriesArray = seriesArray;
     }
     return self;
 }
 
 - (void)windowDidLoad {
     [super windowDidLoad];
+    [self initializeImageSeries];
+}
+
+- (void)initializeImageSeries {
     
-    JNWCollectionViewGridLayout *gridLayout = [[JNWCollectionViewGridLayout alloc] init];
-    gridLayout.delegate = self;
-    gridLayout.itemSize = CGSizeMake(100, 100);
-    _collectionView.collectionViewLayout = gridLayout;
-    _collectionView.dataSource = self;
-    [self.collectionView registerClass:GridCell.class forCellWithReuseIdentifier:identifier];
-    [self.collectionView reloadData];
-}
-
-#pragma mark <NSTableViewDataSource>
-
-- (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView{
-    return self.seriesDictionary.allKeys.count;
-}
-
-- (nullable id)tableView:(NSTableView *)tableView objectValueForTableColumn:(nullable NSTableColumn *)tableColumn row:(NSInteger)row{
-    
-    NSNumber* key = _seriesDictionary.allKeys[row];
-    NSMutableArray* array = _seriesDictionary[key];
-    if ([tableColumn.identifier isEqualToString:ID_CELL_SERIES ]) {
-        return [NSString stringWithFormat:@"Set: %li",row];
-    }else{
-        return @(array.count).description;
-    }
-}
-
-#pragma mark <NSTableViewDelegate>
--(void)tableViewSelectionDidChange:(NSNotification *)notification{
-    NSInteger selectedRow = [[notification object] selectedRow];
-    NSNumber* key = _seriesDictionary.allKeys[selectedRow];
-    NSMutableArray* array = _seriesDictionary[key];
-    self.selectedImageArray = array;
-    [self didClickSelectSetButton:self];
-}
-
-#pragma mark <JNWCollectionViewDataSource>
-
-- (CGSize)sizeForItemInCollectionView:(JNWCollectionView *)collectionView {
-    return CGSizeMake(100, 100);
-}
-
-- (NSUInteger)collectionView:(JNWCollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return self.selectedImageArray.count;
-}
-
-- (JNWCollectionViewCell *)collectionView:(JNWCollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    GridCell *cell = (GridCell *)[collectionView dequeueReusableCellWithIdentifier:identifier];
-    DicomSeries* series = [self.selectedImageArray objectAtIndex:indexPath.item];
-    cell.image = series.thumbnailImage;
-    return cell;
-}
-
-
-
-- (IBAction)didClickSelectSetButton:(id)sender {
-    
-    if (!self.selectedImageArray) {
+    if (!self.seriesArray) {
         NSRunInformationalAlertPanel(@"Select Image Set", @"You must select an imageset from the menu on left", @"Ok", 0L, 0L);
     }else{
-        DicomSeries* series1 = self.selectedImageArray[0];
-        DicomSeries* series2 = self.selectedImageArray[1];
-        DicomSeries* series3 = self.selectedImageArray[2];
+        DicomSeries* series1 = self.seriesArray[0];
+        DicomSeries* series2 = self.seriesArray[1];
+        DicomSeries* series3 = self.seriesArray[2];
         
         self.redSeries = series1;
         self.greenSeries = series2;
         self.blueSeries = series3;
+        
         
         [self.imgRed setImage:self.redSeries.thumbnailImage];
         [self.imgGreen setImage:self.greenSeries.thumbnailImage];
@@ -145,13 +80,14 @@ static NSString* const identifier = @"CELL";
     [self.btnGreen.menu removeAllItems];
     [self.btnBlue.menu removeAllItems];
     
-    for (DicomSeries* series in self.selectedImageArray) {
-        NSMenuItem* item1 = [[NSMenuItem alloc] initWithTitle:series.name action:@selector(didSelectMenuItem:) keyEquivalent:@"red"];
+    for (DicomSeries* series in self.seriesArray) {
+        NSString* seriesName = [NSString stringWithFormat:@"%@ (%li images)",series.name,series.images.count];
+        NSMenuItem* item1 = [[NSMenuItem alloc] initWithTitle:seriesName action:@selector(didSelectMenuItem:) keyEquivalent:@"red"];
         [item1 setImage:series.thumbnailImage];
-        NSMenuItem* item2 = [[NSMenuItem alloc] initWithTitle:series.name action:@selector(didSelectMenuItem:) keyEquivalent:@"green"];
+        NSMenuItem* item2 = [[NSMenuItem alloc] initWithTitle:seriesName action:@selector(didSelectMenuItem:) keyEquivalent:@"green"];
         [item2 setImage:series.thumbnailImage];
         
-        NSMenuItem* item3 = [[NSMenuItem alloc] initWithTitle:series.name action:@selector(didSelectMenuItem:) keyEquivalent:@"blue"];
+        NSMenuItem* item3 = [[NSMenuItem alloc] initWithTitle:seriesName action:@selector(didSelectMenuItem:) keyEquivalent:@"blue"];
         [item3 setImage:series.thumbnailImage];
 
         [self.btnRed.menu addItem:item1];
@@ -182,8 +118,9 @@ static NSString* const identifier = @"CELL";
 }
 
 - (DicomSeries*)selectSeriesWithName:(NSString*)name{
-    for (DicomSeries* series in self.selectedImageArray) {
-        if ([series.name isEqualToString:name]) {
+    for (DicomSeries* series in self.seriesArray) {
+        NSString* seriesName = [NSString stringWithFormat:@"%@ (%li images)",series.name,series.images.count];
+        if ([seriesName isEqualToString:name]) {
             return series;
         }
     }

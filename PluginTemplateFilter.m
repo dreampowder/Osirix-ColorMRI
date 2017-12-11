@@ -23,43 +23,26 @@
 {
     
     
-
-//    ViewerController    *new2DViewer;
-//    new2DViewer = [self duplicateCurrent2DViewerWindow];
-
-    //Here we are trying to decide which series are eligable for putting into RGB Channels.
-    //Image series are grouped by their image count, and if there are more than or equal to 3 image sets with same count
-    //imageset is eligable.
-    NSMutableDictionary<NSNumber*,NSMutableArray*>* possibleSeries = @{}.mutableCopy;
-    NSMutableDictionary<NSNumber*,NSMutableArray*>* tempSeries = @{}.mutableCopy;
+    
+    //    ViewerController    *new2DViewer;
+    //    new2DViewer = [self duplicateCurrent2DViewerWindow];
+    
+    NSMutableArray<DicomSeries*>* seriesArray = @[].mutableCopy;
+    
     BrowserController *currentBrowser = [BrowserController currentBrowser];
     NSArray *selectedItems = [currentBrowser databaseSelection];
     for (id item in selectedItems) {
         if ([item isKindOfClass:[DicomStudy class]]) {
             NSArray* listOfSeries = [(DicomStudy*)item imageSeries];
-            for (DicomSeries* imageSeries in listOfSeries) {
-                
-                NSNumber* seriesKey = @(imageSeries.images.count);
-                if(![tempSeries objectForKey:seriesKey]){
-                    [tempSeries setObject:@[imageSeries].mutableCopy forKey:seriesKey];
-                }else{
-                    [tempSeries[seriesKey] addObject:imageSeries];
-                }
-            }
-        }
-    }
-    for (NSNumber* key in tempSeries.allKeys) {
-        NSMutableArray* array = tempSeries[key];
-        if (array.count>=3) {
-            possibleSeries[key] = array;
+            [seriesArray addObjectsFromArray:listOfSeries];
         }
     }
     
-    self.windowImageSelector = [[ImageSetSelector alloc] initWithSeriesDictionary:possibleSeries];
+    self.windowImageSelector = [[ImageSetSelector alloc] initWithSeriesArray:seriesArray.copy];
     self.windowImageSelector.delegate = self;
     [self.viewerWindow.window beginSheet:self.windowImageSelector.window completionHandler:nil];
-//    if( new2DViewer) return 0; // No Errors
-//    else return -1;
+    //    if( new2DViewer) return 0; // No Errors
+    //    else return -1;
     return 0;
 }
 
@@ -210,10 +193,76 @@
 //
 //}
 
+- (void)generateRGBSetWithRedChannel:(DicomSeries*)redSeries
+                     andGreenChannel:(DicomSeries*)greenSeries
+                      andBlueChannel:(DicomSeries*)blueSeries{
+    
+    ViewerController    *new2DViewer;
+    new2DViewer = [self duplicateCurrent2DViewerWindow];
+    
+    NSArray *pixList = [new2DViewer pixList: 0];
+    
+    
+//    NSMutableSet* imageSet = [NSMutableSet new];
+    
+    for (int i = 0;i<pixList.count;i++) {
+        
+        [new2DViewer setImageIndex:i];
+        int curSlice = [[new2DViewer imageView] curImage];
+        DCMPix *curPix = [pixList objectAtIndex:curSlice];
+        [self convertPixToRGB:curPix Red:redSeries.sortedImages[curSlice] Green:greenSeries.sortedImages[curSlice] Blue:blueSeries.sortedImages[curSlice]];
+        [new2DViewer needsDisplayUpdate];
+    }
+    //    ViewerController    *new2DViewer;
+    //    new2DViewer = [self duplicateCurrent2DViewerWindow];
+    
+}
+
+- (void)convertPixToRGB:(DCMPix*)currentPix
+                     Red:(DicomImage*)redImg
+                   Green:(DicomImage*)greenImg
+                    Blue:(DicomImage*)blueImg{
+    
+//    DCMPix* currentPix = [DCMPix dcmPixWithImageObj:currentImg];
+    [currentPix ConvertToRGB:3 :currentPix.wl :currentPix.ww];
+    
+    DCMPix* redPix = [DCMPix dcmPixWithImageObj:redImg];
+    [redPix ConvertToRGB:3 :redPix.wl :redPix.ww];
+    
+    DCMPix* greenPix = [DCMPix dcmPixWithImageObj:greenImg];
+    [greenPix ConvertToRGB:3 :greenPix.wl :greenPix.ww];
+    
+    DCMPix* bluePix = [DCMPix dcmPixWithImageObj:blueImg];
+    [bluePix ConvertToRGB:3 :bluePix.wl :bluePix.ww];
+    
+    NSLog(@"current: %f-%f\n\n\nred: %f-%f\n\n\ngreen: %f-%f\n\n\nblur:%f-%f",currentPix.wl,currentPix.ww,redPix.wl,redPix.ww,greenPix.wl,greenPix.ww,bluePix.wl,bluePix.ww);
+    
+    unsigned char *rgbImage = (unsigned char*) [currentPix fImage];
+    unsigned char *redImage = (unsigned char*) [redPix fImage];
+    unsigned char *greenImage = (unsigned char*) [greenPix fImage];
+    unsigned char *blueImage = (unsigned char*) [bluePix fImage];
+    for (int x = 0; x < [currentPix pwidth]; x++){
+        for (int y = 0; y < [currentPix pheight]; y++)
+        {
+            long curPos = y * [currentPix pwidth] + x;
+            // Reading Pixels
+            short redValue = redImage[curPos*4 +1];
+            short greenValue = greenImage[curPos*4 +2];
+            short blueValue = blueImage[curPos*4 +3];
+            
+            // Writing Pixels
+            rgbImage[curPos*4 +1] = redValue;
+            rgbImage[curPos*4 +2] = greenValue;
+            rgbImage[curPos*4 +3] = blueValue;
+        }
+    }
+}
+
 #pragma mark <ImageSetSelectorDelegate>
 
 - (void)didSelectRedChannel:(DicomSeries *)redSeries greenChannel:(DicomSeries *)greenSeries blueChannel:(DicomSeries *)blueSeries{
-    
+    [self generateRGBSetWithRedChannel:redSeries andGreenChannel:greenSeries andBlueChannel:blueSeries];
 }
+
 
 @end
