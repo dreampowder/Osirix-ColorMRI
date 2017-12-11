@@ -2,7 +2,7 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:/Users/serdarcoskun/Projects/osirix/Orisix-Nevit/Nevit-RGB-Filter.xcodeproj">
+      location = "group:/Users/serdarcoskun/Projects/osirix/Orisix-Nevit/Osirix ColorMRI.xcodeproj">
    </FileRef>
    <FileRef
       location = "group:Pods/Pods.xcodeproj">

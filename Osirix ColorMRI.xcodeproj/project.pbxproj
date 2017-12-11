@@ -14,7 +14,7 @@
 		0072BFE91FD970D400E991A9 /* GridCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0072BFE71FD970D400E991A9 /* GridCell.m */; };
 		81D3A0531C52597161F1317E /* libPods-NevitColorizer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C3BF485454F9BDC1DBDF06B /* libPods-NevitColorizer.a */; };
 		8420023212E829A200E1E9CE /* OsiriXAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8420023112E829A200E1E9CE /* OsiriXAPI.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
-		8D5B49AE048680CD000E48DA /* Nevit-RGB-Filter_Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = 32DBCF630370AF2F00C91783 /* Nevit-RGB-Filter_Prefix.pch */; };
+		8D5B49AE048680CD000E48DA /* Osirix ColorMRI_Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = 32DBCF630370AF2F00C91783 /* Osirix ColorMRI_Prefix.pch */; };
 		8D5B49B0048680CD000E48DA /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C167DFE841241C02AAC07 /* InfoPlist.strings */; };
 		8D5B49B4048680CD000E48DA /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7ADFEA557BF11CA2CBB /* Cocoa.framework */; };
 		ABA48A650680BB600089EB4F /* PluginTemplateFilter.h in Headers */ = {isa = PBXBuildFile; fileRef = ABA48A640680BB600089EB4F /* PluginTemplateFilter.h */; };
@@ -33,12 +33,12 @@
 		089C167EFE841241C02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		089C167FFE841241C02AAC07 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		1058C7ADFEA557BF11CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
-		32DBCF630370AF2F00C91783 /* Nevit-RGB-Filter_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Nevit-RGB-Filter_Prefix.pch"; sourceTree = "<group>"; };
+		32DBCF630370AF2F00C91783 /* Osirix ColorMRI_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Osirix ColorMRI_Prefix.pch"; sourceTree = "<group>"; };
 		4C3BF485454F9BDC1DBDF06B /* libPods-NevitColorizer.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-NevitColorizer.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8420023112E829A200E1E9CE /* OsiriXAPI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = OsiriXAPI.framework; sourceTree = "<group>"; };
 		8D5B49B7048680CD000E48DA /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		99D1E40EB74CB93151388C66 /* Pods-NevitColorizer.development.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NevitColorizer.development.xcconfig"; path = "Pods/Target Support Files/Pods-NevitColorizer/Pods-NevitColorizer.development.xcconfig"; sourceTree = "<group>"; };
-		AB5D36050680E57E00F4007A /* NevitColorizer.osirixplugin */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NevitColorizer.osirixplugin; sourceTree = BUILT_PRODUCTS_DIR; };
+		AB5D36050680E57E00F4007A /* ColorMRI.osirixplugin */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ColorMRI.osirixplugin; sourceTree = BUILT_PRODUCTS_DIR; };
 		ABA48A640680BB600089EB4F /* PluginTemplateFilter.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = PluginTemplateFilter.h; sourceTree = "<group>"; };
 		ABA48A660680BB690089EB4F /* PluginTemplateFilter.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = PluginTemplateFilter.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -57,7 +57,7 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		000AE05E1FD92ADB00228F5D /* Modal Sheet */ = {
+		000AE05E1FD92ADB00228F5D /* Mri Settings */ = {
 			isa = PBXGroup;
 			children = (
 				0072BFE21FD96F6E00E991A9 /* Cell */,
@@ -65,7 +65,7 @@
 				000AE0661FD92BE700228F5D /* ImageSetSelector.m */,
 				000AE0671FD92BE700228F5D /* ImageSetSelector.xib */,
 			);
-			name = "Modal Sheet";
+			name = "Mri Settings";
 			sourceTree = "<group>";
 		};
 		0072BFE21FD96F6E00E991A9 /* Cell */ = {
@@ -113,7 +113,7 @@
 		08FB77AFFE84173DC02AAC07 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				000AE05E1FD92ADB00228F5D /* Modal Sheet */,
+				000AE05E1FD92ADB00228F5D /* Mri Settings */,
 				AB2C26750677B0C400A08910 /* MyNewPluginFilter */,
 			);
 			name = Classes;
@@ -148,7 +148,7 @@
 		19C28FB8FE9D52D311CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				AB5D36050680E57E00F4007A /* NevitColorizer.osirixplugin */,
+				AB5D36050680E57E00F4007A /* ColorMRI.osirixplugin */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -156,7 +156,7 @@
 		32C88E010371C26100C91783 /* Other Sources */ = {
 			isa = PBXGroup;
 			children = (
-				32DBCF630370AF2F00C91783 /* Nevit-RGB-Filter_Prefix.pch */,
+				32DBCF630370AF2F00C91783 /* Osirix ColorMRI_Prefix.pch */,
 			);
 			name = "Other Sources";
 			sourceTree = "<group>";
@@ -186,7 +186,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8D5B49AE048680CD000E48DA /* Nevit-RGB-Filter_Prefix.pch in Headers */,
+				8D5B49AE048680CD000E48DA /* Osirix ColorMRI_Prefix.pch in Headers */,
 				000AE0681FD92BE700228F5D /* ImageSetSelector.h in Headers */,
 				0072BFE81FD970D400E991A9 /* GridCell.h in Headers */,
 				ABA48A650680BB600089EB4F /* PluginTemplateFilter.h in Headers */,
@@ -196,9 +196,9 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		8D5B49AC048680CD000E48DA /* NevitColorizer */ = {
+		8D5B49AC048680CD000E48DA /* ColorMRI */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = CE6A9A9008AC841300D0C1EE /* Build configuration list for PBXNativeTarget "NevitColorizer" */;
+			buildConfigurationList = CE6A9A9008AC841300D0C1EE /* Build configuration list for PBXNativeTarget "ColorMRI" */;
 			buildPhases = (
 				284C2001E4CF712D6BC23068 /* [CP] Check Pods Manifest.lock */,
 				8D5B49AD048680CD000E48DA /* Headers */,
@@ -212,10 +212,10 @@
 			);
 			dependencies = (
 			);
-			name = NevitColorizer;
+			name = ColorMRI;
 			productInstallPath = "$(HOME)/Library/Bundles";
 			productName = Invert;
-			productReference = AB5D36050680E57E00F4007A /* NevitColorizer.osirixplugin */;
+			productReference = AB5D36050680E57E00F4007A /* ColorMRI.osirixplugin */;
 			productType = "com.apple.product-type.bundle";
 		};
 /* End PBXNativeTarget section */
@@ -226,7 +226,7 @@
 			attributes = {
 				LastUpgradeCheck = 0920;
 			};
-			buildConfigurationList = CE6A9A9408AC841300D0C1EE /* Build configuration list for PBXProject "Nevit-RGB-Filter" */;
+			buildConfigurationList = CE6A9A9408AC841300D0C1EE /* Build configuration list for PBXProject "Osirix ColorMRI" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 1;
@@ -241,7 +241,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				8D5B49AC048680CD000E48DA /* NevitColorizer */,
+				8D5B49AC048680CD000E48DA /* ColorMRI */,
 			);
 		};
 /* End PBXProject section */
@@ -345,7 +345,7 @@
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Nevit-RGB-Filter_Prefix.pch";
+				GCC_PREFIX_HEADER = "Osirix ColorMRI_Prefix.pch";
 				GCC_WARN_FOUR_CHARACTER_CONSTANTS = NO;
 				GCC_WARN_UNKNOWN_PRAGMAS = NO;
 				HEADER_SEARCH_PATHS = "$(inherited)";
@@ -362,7 +362,7 @@
 				);
 				OTHER_REZFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = osirix.plugin.nevit.rgb;
-				PRODUCT_NAME = NevitColorizer;
+				PRODUCT_NAME = ColorMRI;
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = (
 					"-Wmost",
@@ -386,7 +386,7 @@
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_ENABLE_TRIGRAPHS = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Nevit-RGB-Filter_Prefix.pch";
+				GCC_PREFIX_HEADER = "Osirix ColorMRI_Prefix.pch";
 				GCC_WARN_FOUR_CHARACTER_CONSTANTS = NO;
 				GCC_WARN_UNKNOWN_PRAGMAS = NO;
 				HEADER_SEARCH_PATHS = "$(inherited)";
@@ -403,7 +403,7 @@
 				);
 				OTHER_REZFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = osirix.plugin.nevit.rgb;
-				PRODUCT_NAME = NevitColorizer;
+				PRODUCT_NAME = ColorMRI;
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = (
 					"-Wmost",
@@ -482,7 +482,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		CE6A9A9008AC841300D0C1EE /* Build configuration list for PBXNativeTarget "NevitColorizer" */ = {
+		CE6A9A9008AC841300D0C1EE /* Build configuration list for PBXNativeTarget "ColorMRI" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				CE6A9A9108AC841300D0C1EE /* Development */,
@@ -491,7 +491,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Development;
 		};
-		CE6A9A9408AC841300D0C1EE /* Build configuration list for PBXProject "Nevit-RGB-Filter" */ = {
+		CE6A9A9408AC841300D0C1EE /* Build configuration list for PBXProject "Osirix ColorMRI" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				CE6A9A9508AC841300D0C1EE /* Development */,
