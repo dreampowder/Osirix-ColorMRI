@@ -7,8 +7,9 @@
 
 #import "ImageSetSelector.h"
 #import <Accelerate/Accelerate.h>
+#import <PXSourceList.h>
 
-@interface ImageSetSelector ()
+@interface ImageSetSelector ()<PXSourceListDelegate,PXSourceListDataSource>
 
 @property (strong) IBOutlet NSImageView* imgRed;
 @property (strong) IBOutlet NSImageView* imgGreen;
@@ -22,6 +23,7 @@
 @property (strong) IBOutlet NSButton* btnSelectSet;
 @property (strong) IBOutlet NSButton* btnApplyColors;
 
+@property (strong) IBOutlet PXSourceList* outlineView;
 
 
 @property (strong) NSArray<DicomSeries*>* seriesArray;
@@ -47,6 +49,8 @@
 - (void)windowDidLoad {
     [super windowDidLoad];
     [self initializeImageSeries];
+    self.outlineView.dataSource = self;
+    self.outlineView.delegate = self;
 }
 
 - (void)initializeImageSeries {
@@ -71,6 +75,8 @@
         
         [self populateRGBButtons];
         [self generateSampleImage];
+        
+        [_outlineView reloadData];
     }
 }
 
@@ -219,4 +225,55 @@
         [self.delegate didSelectRedChannel:self.redSeries greenChannel:self.greenSeries blueChannel:self.blueSeries];
     }
 }
+
+#pragma mark - <NSOutlineViewDelegate, NSOutlineViewDataSource>
+
+- (NSUInteger)sourceList:(PXSourceList*)sourceList numberOfChildrenOfItem:(id)item{
+    if (!item) {
+        return _seriesArray.count;
+    }else{
+        return  0;
+    }
+}
+- (id)sourceList:(PXSourceList*)aSourceList child:(NSUInteger)index ofItem:(id)item{
+    if (!item){
+        return _seriesArray[index];
+    }else{
+        return nil;
+    }
+}
+- (BOOL)sourceList:(PXSourceList*)aSourceList isItemExpandable:(id)item{
+    return YES;
+}
+
+- (id)sourceList:(PXSourceList*)aSourceList objectValueForItem:(id)item{
+    if ([[item class] isSubclassOfClass:[DicomSeries class]]) {
+        DicomSeries* series = (DicomSeries*)item;
+        return series.name;
+    }else{
+        return nil;
+    }
+}
+
+- (BOOL)sourceList:(PXSourceList*)aSourceList itemHasBadge:(id)item
+{
+    if ([[item class] isSubclassOfClass:[DicomSeries class]]) {
+        DicomSeries* series = (DicomSeries*)item;
+        return YES;
+    }else{
+        return NO;
+    }
+}
+
+
+- (NSInteger)sourceList:(PXSourceList*)aSourceList badgeValueForItem:(id)item
+{
+    if ([[item class] isSubclassOfClass:[DicomSeries class]]) {
+        DicomSeries* series = (DicomSeries*)item;
+        return series.numberOfImages.integerValue;
+    }
+    else
+        return 0;
+}
+
 @end

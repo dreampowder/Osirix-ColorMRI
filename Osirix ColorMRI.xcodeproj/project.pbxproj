@@ -16,6 +16,7 @@
 		8D5B49B4048680CD000E48DA /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7ADFEA557BF11CA2CBB /* Cocoa.framework */; };
 		ABA48A650680BB600089EB4F /* PluginTemplateFilter.h in Headers */ = {isa = PBXBuildFile; fileRef = ABA48A640680BB600089EB4F /* PluginTemplateFilter.h */; };
 		ABA48A670680BB690089EB4F /* PluginTemplateFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = ABA48A660680BB690089EB4F /* PluginTemplateFilter.m */; };
+		E67139B3E731787665BA1DF6 /* libPods-ColorMRI.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A2D4F21620FE4C67D1A27A70 /* libPods-ColorMRI.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,11 +29,14 @@
 		089C167FFE841241C02AAC07 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		1058C7ADFEA557BF11CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		32DBCF630370AF2F00C91783 /* Osirix ColorMRI_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Osirix ColorMRI_Prefix.pch"; sourceTree = "<group>"; };
+		5A617E9AEDEEBD5888E33F0A /* Pods-ColorMRI.development.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ColorMRI.development.xcconfig"; path = "Pods/Target Support Files/Pods-ColorMRI/Pods-ColorMRI.development.xcconfig"; sourceTree = "<group>"; };
 		8420023112E829A200E1E9CE /* OsiriXAPI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = OsiriXAPI.framework; sourceTree = "<group>"; };
 		8D5B49B7048680CD000E48DA /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A2D4F21620FE4C67D1A27A70 /* libPods-ColorMRI.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ColorMRI.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		AB5D36050680E57E00F4007A /* ColorMRI.osirixplugin */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ColorMRI.osirixplugin; sourceTree = BUILT_PRODUCTS_DIR; };
 		ABA48A640680BB600089EB4F /* PluginTemplateFilter.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = PluginTemplateFilter.h; sourceTree = "<group>"; };
 		ABA48A660680BB690089EB4F /* PluginTemplateFilter.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = PluginTemplateFilter.m; sourceTree = "<group>"; };
+		B5966C546D97E56338AD35A6 /* Pods-ColorMRI.deployment.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ColorMRI.deployment.xcconfig"; path = "Pods/Target Support Files/Pods-ColorMRI/Pods-ColorMRI.deployment.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -42,6 +46,7 @@
 			files = (
 				8D5B49B4048680CD000E48DA /* Cocoa.framework in Frameworks */,
 				8420023212E829A200E1E9CE /* OsiriXAPI.framework in Frameworks */,
+				E67139B3E731787665BA1DF6 /* libPods-ColorMRI.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -51,14 +56,22 @@
 		000AE05E1FD92ADB00228F5D /* Mri Settings */ = {
 			isa = PBXGroup;
 			children = (
-				000AE0651FD92BE700228F5D /* ImageSetSelector.h */,
-				000AE0661FD92BE700228F5D /* ImageSetSelector.m */,
-				000AE0671FD92BE700228F5D /* ImageSetSelector.xib */,
+				003A09E21FED367A0027EA1F /* Old */,
 			);
 			name = "Mri Settings";
 			sourceTree = "<group>";
 		};
-		089C166AFE841209C02AAC07 /* MyNewPlugin */ = {
+		003A09E21FED367A0027EA1F /* Old */ = {
+			isa = PBXGroup;
+			children = (
+				000AE0651FD92BE700228F5D /* ImageSetSelector.h */,
+				000AE0661FD92BE700228F5D /* ImageSetSelector.m */,
+				000AE0671FD92BE700228F5D /* ImageSetSelector.xib */,
+			);
+			name = Old;
+			sourceTree = "<group>";
+		};
+		089C166AFE841209C02AAC07 = {
 			isa = PBXGroup;
 			children = (
 				08FB77AFFE84173DC02AAC07 /* Classes */,
@@ -67,6 +80,7 @@
 				089C1671FE841209C02AAC07 /* Frameworks and Libraries */,
 				19C28FB8FE9D52D311CA2CBB /* Products */,
 				112E0177609A8A44F7FD0FC8 /* Frameworks */,
+				E4575C02E7CB2EB3E0BD4134 /* Pods */,
 			);
 			name = MyNewPlugin;
 			sourceTree = "<group>";
@@ -120,6 +134,7 @@
 			isa = PBXGroup;
 			children = (
 				0072BFEA1FD97A1400E991A9 /* Accelerate.framework */,
+				A2D4F21620FE4C67D1A27A70 /* libPods-ColorMRI.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -149,6 +164,15 @@
 			name = MyNewPluginFilter;
 			sourceTree = "<group>";
 		};
+		E4575C02E7CB2EB3E0BD4134 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				5A617E9AEDEEBD5888E33F0A /* Pods-ColorMRI.development.xcconfig */,
+				B5966C546D97E56338AD35A6 /* Pods-ColorMRI.deployment.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -169,11 +193,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = CE6A9A9008AC841300D0C1EE /* Build configuration list for PBXNativeTarget "ColorMRI" */;
 			buildPhases = (
+				24F5F561092A4273C75640B6 /* [CP] Check Pods Manifest.lock */,
 				8D5B49AD048680CD000E48DA /* Headers */,
 				8D5B49AF048680CD000E48DA /* Resources */,
 				8D5B49B1048680CD000E48DA /* Sources */,
 				8D5B49B3048680CD000E48DA /* Frameworks */,
 				8D5B49B5048680CD000E48DA /* Rez */,
+				F5A2D93ED59D57598B6F8BA7 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -203,7 +229,7 @@
 				French,
 				German,
 			);
-			mainGroup = 089C166AFE841209C02AAC07 /* MyNewPlugin */;
+			mainGroup = 089C166AFE841209C02AAC07;
 			productRefGroup = 19C28FB8FE9D52D311CA2CBB /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -235,6 +261,42 @@
 		};
 /* End PBXRezBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		24F5F561092A4273C75640B6 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-ColorMRI-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F5A2D93ED59D57598B6F8BA7 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ColorMRI/Pods-ColorMRI-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		8D5B49B1048680CD000E48DA /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -261,6 +323,7 @@
 /* Begin XCBuildConfiguration section */
 		CE6A9A9108AC841300D0C1EE /* Development */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5A617E9AEDEEBD5888E33F0A /* Pods-ColorMRI.development.xcconfig */;
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
 				DEBUGGING_SYMBOLS = YES;
@@ -305,6 +368,7 @@
 		};
 		CE6A9A9208AC841300D0C1EE /* Deployment */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = B5966C546D97E56338AD35A6 /* Pods-ColorMRI.deployment.xcconfig */;
 			buildSettings = {
 				COPY_PHASE_STRIP = YES;
 				FRAMEWORK_SEARCH_PATHS = (

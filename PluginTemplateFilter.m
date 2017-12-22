@@ -7,7 +7,6 @@
 
 #import "PluginTemplateFilter.h"
 #import "ImageSetSelector.h"
-
 @interface PluginTemplateFilter()<ImageSetSelectorDelegate>
 @property (strong) ImageSetSelector* windowImageSelector;
 @end
@@ -41,6 +40,9 @@
     self.windowImageSelector = [[ImageSetSelector alloc] initWithSeriesArray:seriesArray.copy];
     self.windowImageSelector.delegate = self;
     [self.viewerWindow.window beginSheet:self.windowImageSelector.window completionHandler:nil];
+
+    
+    
     //    if( new2DViewer) return 0; // No Errors
     //    else return -1;
     return 0;
