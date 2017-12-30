@@ -56,22 +56,14 @@
 		000AE05E1FD92ADB00228F5D /* Mri Settings */ = {
 			isa = PBXGroup;
 			children = (
-				003A09E21FED367A0027EA1F /* Old */,
-			);
-			name = "Mri Settings";
-			sourceTree = "<group>";
-		};
-		003A09E21FED367A0027EA1F /* Old */ = {
-			isa = PBXGroup;
-			children = (
 				000AE0651FD92BE700228F5D /* ImageSetSelector.h */,
 				000AE0661FD92BE700228F5D /* ImageSetSelector.m */,
 				000AE0671FD92BE700228F5D /* ImageSetSelector.xib */,
 			);
-			name = Old;
+			name = "Mri Settings";
 			sourceTree = "<group>";
 		};
-		089C166AFE841209C02AAC07 = {
+		089C166AFE841209C02AAC07 /* MyNewPlugin */ = {
 			isa = PBXGroup;
 			children = (
 				08FB77AFFE84173DC02AAC07 /* Classes */,
@@ -229,7 +221,7 @@
 				French,
 				German,
 			);
-			mainGroup = 089C166AFE841209C02AAC07;
+			mainGroup = 089C166AFE841209C02AAC07 /* MyNewPlugin */;
 			productRefGroup = 19C28FB8FE9D52D311CA2CBB /* Products */;
 			projectDirPath = "";
 			projectRoot = "";

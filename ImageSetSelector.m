@@ -24,11 +24,12 @@
 @property (strong) IBOutlet NSButton* btnApplyColors;
 
 @property (strong) IBOutlet PXSourceList* outlineView;
-
+- (IBAction)didClickDoneButton:(id)sender;
 
 @property (strong) NSArray<DicomSeries*>* seriesArray;
+@property (strong) NSDictionary<NSString*,NSMutableArray<DicomSeries*>*>* seriesMap;
 
-- (IBAction)didClickDoneButton:(id)sender;
+
 
 @property (strong) DicomSeries* redSeries;
 @property (strong) DicomSeries* greenSeries;
@@ -42,6 +43,19 @@
     self = [super initWithWindowNibName:@"ImageSetSelector"];
     if (self) {
         self.seriesArray = seriesArray;
+        NSMutableDictionary<NSString*,NSMutableArray<DicomSeries*>*>* tempMap =@{}.mutableCopy;
+        for(DicomSeries* series in  seriesArray){
+            
+            NSString* key = [NSString stringWithFormat:@"R:%li Num:%li",series.rotationAngle.integerValue,series.numberOfImages.integerValue];
+            if(![tempMap.allKeys containsObject:key]){
+                [tempMap setObject:@[series].mutableCopy forKey:key];
+            }else{
+                [[tempMap objectForKey:key] addObject:series];
+            }
+        }
+        
+        self.seriesMap = tempMap;
+        NSLog(@"SeriesMap: %@",_seriesMap);
     }
     return self;
 }
@@ -95,7 +109,7 @@
         
         NSMenuItem* item3 = [[NSMenuItem alloc] initWithTitle:seriesName action:@selector(didSelectMenuItem:) keyEquivalent:@"blue"];
         [item3 setImage:series.thumbnailImage];
-
+        
         [self.btnRed.menu addItem:item1];
         [self.btnGreen.menu addItem:item2];
         [self.btnBlue.menu addItem:item3];
@@ -152,19 +166,19 @@
     redBuffer.width = size.width;
     redBuffer.height = size.height;
     redBuffer.rowBytes = [redImageData length]/size.height;
-
+    
     vImage_Buffer greenBuffer;
     greenBuffer.data = (void*)greenImageData.bytes;
     greenBuffer.width = size.width;
     greenBuffer.height = size.height;
     greenBuffer.rowBytes = [greenImageData length]/size.height;
-
+    
     vImage_Buffer blueBuffer;
     blueBuffer.data = (void*)blueImageData.bytes;
     blueBuffer.width = size.width;
     blueBuffer.height = size.height;
     blueBuffer.rowBytes = [blueImageData length]/size.height;
-
+    
     size_t destinationImageBytesLength = size.width*size.height*3;
     const void* destinationImageBytes = valloc(destinationImageBytesLength);
     NSData* destinationImageData = [[NSData alloc] initWithBytes:destinationImageBytes length:destinationImageBytesLength];
@@ -173,7 +187,7 @@
     destinationBuffer.width = size.width;
     destinationBuffer.height = size.height;
     destinationBuffer.rowBytes = [destinationImageData length]/size.height;
-
+    
     vImage_Error result = vImageConvert_Planar8toRGB888(&redBuffer, &greenBuffer, &blueBuffer, &destinationBuffer, 0);
     NSImage* image = nil;
     if(result == kvImageNoError)
@@ -230,24 +244,40 @@
 
 - (NSUInteger)sourceList:(PXSourceList*)sourceList numberOfChildrenOfItem:(id)item{
     if (!item) {
-        return _seriesArray.count;
+        return _seriesMap.allKeys.count;
+    }else if ([[item class] isSubclassOfClass:[NSMutableArray class]]){
+        NSMutableArray* array = (NSMutableArray*)item;
+        NSLog(@"NumChild Array: %li",array.count);
+        return array.count;
     }else{
-        return  0;
+        NSLog(@"NumChild Else: %@",[item className]);
+        return 0;
     }
 }
 - (id)sourceList:(PXSourceList*)aSourceList child:(NSUInteger)index ofItem:(id)item{
-    if (!item){
-        return _seriesArray[index];
+    if (!item) {
+        NSString* key = _seriesMap.allKeys[index];
+        return _seriesMap[key]; //Return Array
+    }else if ([[item class] isSubclassOfClass:[NSMutableArray class]]){
+        NSMutableArray* array = (NSMutableArray*)item;
+        return array[index]; //Return DicomSeries
     }else{
         return nil;
     }
 }
 - (BOOL)sourceList:(PXSourceList*)aSourceList isItemExpandable:(id)item{
-    return YES;
+    return ![[item class] isSubclassOfClass:[DicomSeries class]];
 }
 
 - (id)sourceList:(PXSourceList*)aSourceList objectValueForItem:(id)item{
-    if ([[item class] isSubclassOfClass:[DicomSeries class]]) {
+    if ([[item class] isSubclassOfClass:[NSMutableArray class]]) {
+        for(NSString* key in _seriesMap.allKeys){
+            if ([_seriesMap[key] isEqual:item]) {
+                return key;
+            }
+        }
+        return @"not found";
+    }else if([[item class] isSubclassOfClass:[DicomSeries class]]){
         DicomSeries* series = (DicomSeries*)item;
         return series.name;
     }else{
@@ -257,23 +287,29 @@
 
 - (BOOL)sourceList:(PXSourceList*)aSourceList itemHasBadge:(id)item
 {
-    if ([[item class] isSubclassOfClass:[DicomSeries class]]) {
-        DicomSeries* series = (DicomSeries*)item;
-        return YES;
-    }else{
-        return NO;
-    }
+    return YES;
 }
-
 
 - (NSInteger)sourceList:(PXSourceList*)aSourceList badgeValueForItem:(id)item
 {
     if ([[item class] isSubclassOfClass:[DicomSeries class]]) {
         DicomSeries* series = (DicomSeries*)item;
         return series.numberOfImages.integerValue;
+    }else{
+        NSMutableArray* array = (NSMutableArray*)item;
+        return array.count;
     }
-    else
-        return 0;
+}
+
+- (BOOL)sourceList:(PXSourceList*)aSourceList isGroupAlwaysExpanded:(id)group{
+    return NO;
+}
+
+- (BOOL)sourceList:(PXSourceList*)aSourceList shouldSelectItem:(id)item{
+    self.seriesArray = [aSourceList parentForItem:item];
+    NSLog(@"selected Item: %@",item);
+    [self initializeImageSeries];
+    return YES;
 }
 
 @end

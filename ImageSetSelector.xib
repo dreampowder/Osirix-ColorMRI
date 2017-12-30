@@ -9,6 +9,14 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="ImageSetSelector">
             <connections>
+                <outlet property="btnApplyColors" destination="0hr-sp-QHI" id="ETu-Vn-hDl"/>
+                <outlet property="btnBlue" destination="xJ9-GB-83r" id="ZnB-rj-8cG"/>
+                <outlet property="btnGreen" destination="STV-3a-3AC" id="9so-ga-4uG"/>
+                <outlet property="btnRed" destination="LdJ-gH-4Bq" id="ZOj-r7-pb4"/>
+                <outlet property="imgBlue" destination="WAw-WC-G7v" id="0Th-tY-w6H"/>
+                <outlet property="imgGreen" destination="351-fv-TC3" id="e13-cY-Ij9"/>
+                <outlet property="imgRed" destination="Xu7-Hf-68q" id="5Sl-4x-Hpq"/>
+                <outlet property="imgSample" destination="5sP-Xw-uki" id="1LG-oQ-oKq"/>
                 <outlet property="outlineView" destination="X1r-b1-nwi" id="Tdm-yY-IiB"/>
                 <outlet property="window" destination="F0z-JX-Cv5" id="gIp-Ho-8D9"/>
             </connections>
@@ -19,7 +27,7 @@
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="196" y="240" width="614" height="556"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1680" height="1027"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1057"/>
             <view key="contentView" wantsLayer="YES" id="se5-gp-TjO">
                 <rect key="frame" x="0.0" y="0.0" width="614" height="556"/>
                 <autoresizingMask key="autoresizingMask"/>
