@@ -7,6 +7,9 @@
 
 #import "PluginTemplateFilter.h"
 #import "ImageSetSelector.h"
+#import <OsiriXAPI/SeriesView.h>
+#import <OsiriXAPI/DICOMExport.h>
+#import <OsiriXAPI/BrowserController.h>
 @interface PluginTemplateFilter()<ImageSetSelectorDelegate>
 @property (strong) ImageSetSelector* windowImageSelector;
 @end
@@ -199,33 +202,32 @@
                      andGreenChannel:(DicomSeries*)greenSeries
                       andBlueChannel:(DicomSeries*)blueSeries{
     
-    ViewerController    *new2DViewer;
-    new2DViewer = [self duplicateCurrent2DViewerWindow];
-    
-    NSArray *pixList = [new2DViewer pixList: 0];
-    
-    
-//    NSMutableSet* imageSet = [NSMutableSet new];
-    
+    [[BrowserController currentBrowser] databaseOpenStudy:redSeries];
+    ViewerController* newViewetController = nil;
+    for (ViewerController* vc in [ViewerController getDisplayed2DViewers]) {
+        if ([vc.imageView.seriesObj.name isEqualToString:redSeries.name]) {
+            newViewetController = vc;
+            NSLog(@"Set ViewerWindow");
+        }
+    }
+//    new2DViewer = [self duplicateCurrent2DViewerWindow];
+//
+    NSArray *pixList = [newViewetController pixList: 0];
     for (int i = 0;i<pixList.count;i++) {
-        
-        [new2DViewer setImageIndex:i];
-        int curSlice = [[new2DViewer imageView] curImage];
+        [newViewetController setImageIndex:i];
+        int curSlice = [[newViewetController imageView] curImage];
         DCMPix *curPix = [pixList objectAtIndex:curSlice];
         [self convertPixToRGB:curPix Red:redSeries.sortedImages[curSlice] Green:greenSeries.sortedImages[curSlice] Blue:blueSeries.sortedImages[curSlice]];
-        [new2DViewer needsDisplayUpdate];
+        [newViewetController needsDisplayUpdate];
     }
-    //    ViewerController    *new2DViewer;
-    //    new2DViewer = [self duplicateCurrent2DViewerWindow];
-    
 }
 
-- (void)convertPixToRGB:(DCMPix*)currentPix
+- (unsigned char)convertPixToRGB:(DCMPix*)currentPix
                      Red:(DicomImage*)redImg
                    Green:(DicomImage*)greenImg
                     Blue:(DicomImage*)blueImg{
     
-//    DCMPix* currentPix = [DCMPix dcmPixWithImageObj:currentImg];
+    
     [currentPix ConvertToRGB:3 :currentPix.wl :currentPix.ww];
     
     DCMPix* redPix = [DCMPix dcmPixWithImageObj:redImg];
@@ -240,6 +242,7 @@
     NSLog(@"current: %f-%f\n\n\nred: %f-%f\n\n\ngreen: %f-%f\n\n\nblur:%f-%f",currentPix.wl,currentPix.ww,redPix.wl,redPix.ww,greenPix.wl,greenPix.ww,bluePix.wl,bluePix.ww);
     
     unsigned char *rgbImage = (unsigned char*) [currentPix fImage];
+    
     unsigned char *redImage = (unsigned char*) [redPix fImage];
     unsigned char *greenImage = (unsigned char*) [greenPix fImage];
     unsigned char *blueImage = (unsigned char*) [bluePix fImage];
@@ -258,6 +261,7 @@
             rgbImage[curPos*4 +3] = blueValue;
         }
     }
+    return rgbImage;
 }
 
 #pragma mark <ImageSetSelectorDelegate>

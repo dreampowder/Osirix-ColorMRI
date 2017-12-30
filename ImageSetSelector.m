@@ -9,6 +9,7 @@
 #import <Accelerate/Accelerate.h>
 #import <PXSourceList.h>
 
+
 @interface ImageSetSelector ()<PXSourceListDelegate,PXSourceListDataSource>
 
 @property (strong) IBOutlet NSImageView* imgRed;
@@ -27,7 +28,7 @@
 - (IBAction)didClickDoneButton:(id)sender;
 
 @property (strong) NSArray<DicomSeries*>* seriesArray;
-@property (strong) NSDictionary<NSString*,NSMutableArray<DicomSeries*>*>* seriesMap;
+@property (strong) NSMutableDictionary<NSString*,NSMutableArray<DicomSeries*>*>* seriesMap;
 
 
 
@@ -45,26 +46,36 @@
         self.seriesArray = seriesArray;
         NSMutableDictionary<NSString*,NSMutableArray<DicomSeries*>*>* tempMap =@{}.mutableCopy;
         for(DicomSeries* series in  seriesArray){
+            DicomImage* image = series.sortedImages.firstObject;
             
-            NSString* key = [NSString stringWithFormat:@"R:%li Num:%li",series.rotationAngle.integerValue,series.numberOfImages.integerValue];
+            NSString* key = [NSString stringWithFormat:@"R:%li Num:%li-res:%f-%f",series.rotationAngle.integerValue,series.numberOfImages.integerValue,image.width.doubleValue,image.height.doubleValue];
             if(![tempMap.allKeys containsObject:key]){
                 [tempMap setObject:@[series].mutableCopy forKey:key];
             }else{
                 [[tempMap objectForKey:key] addObject:series];
             }
         }
-        
-        self.seriesMap = tempMap;
-        NSLog(@"SeriesMap: %@",_seriesMap);
+        self.seriesMap = @{}.mutableCopy;
+        int counter = 0;
+        for (NSString* key in tempMap.allKeys) {
+            NSMutableArray* array = tempMap[key];
+            if (array.count>=2) {
+                counter++;
+                [_seriesMap setObject:array forKey:[NSString stringWithFormat:@"Group - %i",counter]];
+            }
+        }
     }
     return self;
 }
 
 - (void)windowDidLoad {
     [super windowDidLoad];
-    [self initializeImageSeries];
     self.outlineView.dataSource = self;
     self.outlineView.delegate = self;
+    if (_seriesMap.allKeys.count==0) {
+        NSRunInformationalAlertPanel(@"Image Set Selector", @"There are no compatible image sets available in this study.", @"Ok", 0L, 0L);
+        [self.window.sheetParent endSheet:self.window returnCode:NSModalResponseOK];
+    }
 }
 
 - (void)initializeImageSeries {
@@ -235,9 +246,10 @@
 }
 
 - (IBAction)didClickDoneButton:(id)sender{
-    if([self.delegate respondsToSelector:@selector(didSelectRedChannel:greenChannel:blueChannel:)]){
-        [self.delegate didSelectRedChannel:self.redSeries greenChannel:self.greenSeries blueChannel:self.blueSeries];
-    }
+    
+    [self.delegate didSelectRedChannel:self.redSeries greenChannel:self.greenSeries blueChannel:self.blueSeries];
+    [self.window.sheetParent endSheet:self.window returnCode:NSModalResponseOK];
+    
 }
 
 #pragma mark - <NSOutlineViewDelegate, NSOutlineViewDataSource>
@@ -302,7 +314,7 @@
 }
 
 - (BOOL)sourceList:(PXSourceList*)aSourceList isGroupAlwaysExpanded:(id)group{
-    return NO;
+    return YES;
 }
 
 - (BOOL)sourceList:(PXSourceList*)aSourceList shouldSelectItem:(id)item{

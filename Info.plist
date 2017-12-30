@@ -24,7 +24,7 @@
 	<string></string>
 	<key>MenuTitles</key>
 	<array>
-		<string>Colorize RGB</string>
+		<string>Color MRI</string>
 	</array>
 	<key>NSPrincipalClass</key>
 	<string>MyNewPluginFilter</string>

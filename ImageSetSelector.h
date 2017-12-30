@@ -7,7 +7,7 @@
 
 #import <Cocoa/Cocoa.h>
 #import <OsiriXAPI/DicomSeries.h>
-
+#import <OsiriXAPI/DicomImage.h>
 @protocol ImageSetSelectorDelegate
 
 @required
