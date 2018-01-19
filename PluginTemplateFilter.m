@@ -10,6 +10,7 @@
 #import <OsiriXAPI/SeriesView.h>
 #import <OsiriXAPI/DICOMExport.h>
 #import <OsiriXAPI/BrowserController.h>
+
 @interface PluginTemplateFilter()<ImageSetSelectorDelegate>
 @property (strong) ImageSetSelector* windowImageSelector;
 @end
@@ -43,11 +44,6 @@
     self.windowImageSelector = [[ImageSetSelector alloc] initWithSeriesArray:seriesArray.copy];
     self.windowImageSelector.delegate = self;
     [self.viewerWindow.window beginSheet:self.windowImageSelector.window completionHandler:nil];
-
-    
-    
-    //    if( new2DViewer) return 0; // No Errors
-    //    else return -1;
     return 0;
 }
 
@@ -203,23 +199,24 @@
                       andBlueChannel:(DicomSeries*)blueSeries{
     
     [[BrowserController currentBrowser] databaseOpenStudy:redSeries];
-    ViewerController* newViewetController = nil;
+    ViewerController* newViewerController = nil;
     for (ViewerController* vc in [ViewerController getDisplayed2DViewers]) {
         if ([vc.imageView.seriesObj.name isEqualToString:redSeries.name]) {
-            newViewetController = vc;
+            newViewerController = vc;
             NSLog(@"Set ViewerWindow");
         }
     }
-//    new2DViewer = [self duplicateCurrent2DViewerWindow];
-//
-    NSArray *pixList = [newViewetController pixList: 0];
+    
+    NSArray *pixList = [newViewerController pixList: 0];
     for (int i = 0;i<pixList.count;i++) {
-        [newViewetController setImageIndex:i];
-        int curSlice = [[newViewetController imageView] curImage];
+        [newViewerController setImageIndex:i];
+        int curSlice = [[newViewerController imageView] curImage];
         DCMPix *curPix = [pixList objectAtIndex:curSlice];
         [self convertPixToRGB:curPix Red:redSeries.sortedImages[curSlice] Green:greenSeries.sortedImages[curSlice] Blue:blueSeries.sortedImages[curSlice]];
-        [newViewetController needsDisplayUpdate];
+        [newViewerController needsDisplayUpdate];
     }
+    [self pressFullDynamicButton];
+    
 }
 
 - (unsigned char)convertPixToRGB:(DCMPix*)currentPix
@@ -264,9 +261,28 @@
     return rgbImage;
 }
 
+//The easiest way to accomplist zero key press is to send default "0" keypress to the system for "Full Dynamic"
+- (void)pressFullDynamicButton{
+    NSLog(@"Pressing Zero!");
+    //Apply Full Dynamic WL/WW to the window by pressing default "0" button for this event
+    CGEventSourceRef src =
+    CGEventSourceCreate(kCGEventSourceStateHIDSystemState);
+    CGEventRef cmdd = CGEventCreateKeyboardEvent(src, (CGKeyCode)0x1D, true);
+    CGEventRef cmdu = CGEventCreateKeyboardEvent(src, (CGKeyCode)0x1D, false);
+    CGEventTapLocation loc = kCGHIDEventTap; // kCGSessionEventTap also works
+    CGEventPost(loc, cmdd);
+    CGEventPost(loc, cmdu);
+    CFRelease(cmdd);
+    CFRelease(cmdu);
+    //Pressed down and up to "0" key (keycode 29)
+}
+
 #pragma mark <ImageSetSelectorDelegate>
 
 - (void)didSelectRedChannel:(DicomSeries *)redSeries greenChannel:(DicomSeries *)greenSeries blueChannel:(DicomSeries *)blueSeries{
+    if (self.windowImageSelector){
+        [self.windowImageSelector close];
+    }
     [self generateRGBSetWithRedChannel:redSeries andGreenChannel:greenSeries andBlueChannel:blueSeries];
 }
 

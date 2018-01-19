@@ -100,7 +100,7 @@
 			isa = PBXGroup;
 			children = (
 				000AE05E1FD92ADB00228F5D /* Mri Settings */,
-				AB2C26750677B0C400A08910 /* MyNewPluginFilter */,
+				AB2C26750677B0C400A08910 /* MRI Plugin Main Controller */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -147,13 +147,13 @@
 			name = "Other Sources";
 			sourceTree = "<group>";
 		};
-		AB2C26750677B0C400A08910 /* MyNewPluginFilter */ = {
+		AB2C26750677B0C400A08910 /* MRI Plugin Main Controller */ = {
 			isa = PBXGroup;
 			children = (
 				ABA48A640680BB600089EB4F /* PluginTemplateFilter.h */,
 				ABA48A660680BB690089EB4F /* PluginTemplateFilter.m */,
 			);
-			name = MyNewPluginFilter;
+			name = "MRI Plugin Main Controller";
 			sourceTree = "<group>";
 		};
 		E4575C02E7CB2EB3E0BD4134 /* Pods */ = {

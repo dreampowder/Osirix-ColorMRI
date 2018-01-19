@@ -85,7 +85,7 @@
     }else{
         DicomSeries* series1 = self.seriesArray[0];
         DicomSeries* series2 = self.seriesArray[1];
-        DicomSeries* series3 = self.seriesArray[2];
+        DicomSeries* series3 = self.seriesArray[self.seriesArray.count>2?2:1];
         
         self.redSeries = series1;
         self.greenSeries = series2;
@@ -97,9 +97,13 @@
         [self.imgBlue setImage:self.blueSeries.thumbnailImage];
         
         [self.imgRed setNeedsLayout:YES];
+        [self.imgGreen setNeedsLayout:YES];
+        [self.imgBlue setNeedsLayout:YES];
         
         [self populateRGBButtons];
         [self generateSampleImage];
+        
+        NSLog(@"R: %@, G:%@, B: %@",series1.name,series2.name,series3.name);
         
         [_outlineView reloadData];
     }
@@ -128,7 +132,7 @@
     self.btnRed.menu.title = @"Red Channel";
     [self.btnRed selectItem:self.btnRed.menu.itemArray[0]];
     [self.btnGreen selectItem:self.btnRed.menu.itemArray[1]];
-    [self.btnBlue selectItem:self.btnRed.menu.itemArray[2]];
+    [self.btnBlue selectItem:self.btnRed.menu.itemArray[self.seriesArray.count>2 ? 2 : 1]];
 }
 
 - (void)didSelectMenuItem:(NSMenuItem*)sender{
@@ -168,6 +172,7 @@
     NSData* blueChannel = [self channelDataFromImage:series3.thumbnailImage];
     
     self.imgSample.image = [self newImageWithSize:series1.thumbnailImage.size fromRedChannel:redChannel greenChannel:greenChannel blueChannel:blueChannel];
+    [self.outlineView reloadData];
 }
 
 - (NSImage*)newImageWithSize:(CGSize)size fromRedChannel:(NSData*)redImageData greenChannel:(NSData*)greenImageData blueChannel:(NSData*)blueImageData
@@ -313,13 +318,30 @@
     }
 }
 
+- (NSColor*)sourceList:(PXSourceList*)aSourceList badgeTextColorForItem:(id)item{
+    if ([[item class] isSubclassOfClass:[DicomSeries class]]) {
+        DicomSeries* series = (DicomSeries*)item;
+        if (self.blueSeries&&[self.blueSeries.uniqueFilename isEqualToString:series.uniqueFilename]) {
+            return [NSColor blueColor];
+        }else if (self.redSeries&&[self.redSeries.uniqueFilename isEqualToString:series.uniqueFilename]) {
+            return [NSColor redColor];
+        }else if (self.greenSeries&&[self.greenSeries.uniqueFilename isEqualToString:series.uniqueFilename]) {
+            return [NSColor greenColor];
+        }else{
+            return nil;
+        }
+    }else{
+        return nil;
+    }
+}
+
 - (BOOL)sourceList:(PXSourceList*)aSourceList isGroupAlwaysExpanded:(id)group{
     return YES;
 }
 
 - (BOOL)sourceList:(PXSourceList*)aSourceList shouldSelectItem:(id)item{
     self.seriesArray = [aSourceList parentForItem:item];
-    NSLog(@"selected Item: %@",item);
+    NSLog(@"selected Item: %@ - Array: %@",item,self.seriesArray);
     [self initializeImageSeries];
     return YES;
 }
