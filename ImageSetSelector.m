@@ -9,7 +9,6 @@
 #import <Accelerate/Accelerate.h>
 #import <PXSourceList.h>
 
-
 @interface ImageSetSelector ()<PXSourceListDelegate,PXSourceListDataSource>
 
 @property (strong) IBOutlet NSImageView* imgRed;
@@ -29,7 +28,7 @@
 
 @property (strong) NSArray<DicomSeries*>* seriesArray;
 @property (strong) NSMutableDictionary<NSString*,NSMutableArray<DicomSeries*>*>* seriesMap;
-
+@property (strong) NSArray* sortedKeyArray;
 
 
 @property (strong) DicomSeries* redSeries;
@@ -47,16 +46,28 @@
         NSMutableDictionary<NSString*,NSMutableArray<DicomSeries*>*>* tempMap =@{}.mutableCopy;
         for(DicomSeries* series in  seriesArray){
             DicomImage* image = series.sortedImages.firstObject;
+//            NSLog(@"IMAGE LOCATION: %@",image.);
+//            NSString* key = [NSString stringWithFormat:@"R:%li Num:%li-res:%f-%f",series.rotationAngle.integerValue,series.numberOfImages.integerValue,image.width.doubleValue,image.height.doubleValue];
+            DCMObject* dicomObject = [DCMObject objectWithContentsOfFile:image.completePath decodingPixelData:false];
+            DCMAttributeTag* pOrientationTag = [DCMAttributeTag tagWithName:@"ImageOrientationPatient"];
+            DCMAttributeTag* pImagePosition = [DCMAttributeTag tagWithName:@"ImagePositionPatient"];
             
-            NSString* key = [NSString stringWithFormat:@"R:%li Num:%li-res:%f-%f",series.rotationAngle.integerValue,series.numberOfImages.integerValue,image.width.doubleValue,image.height.doubleValue];
-            if(![tempMap.allKeys containsObject:key]){
-                [tempMap setObject:@[series].mutableCopy forKey:key];
-            }else{
-                [[tempMap objectForKey:key] addObject:series];
+            NSString* orientation = [[dicomObject attributeForTag:pOrientationTag] value];
+            NSString* position = [[dicomObject attributeForTag:pImagePosition] value];
+            
+            NSLog(@">>>>> Orientation : %@, position: %@",orientation,position);
+            if (orientation&&position){ //These values must be present, if not, don't add them to the list.
+                NSString* key = [NSString stringWithFormat:@"Loc:%@ - Pos:%@ - Ori:%@ - num:%@",image.sliceLocation,position,orientation,series.numberOfImages];
+                if(![tempMap.allKeys containsObject:key]){
+                    [tempMap setObject:@[series].mutableCopy forKey:key];
+                }else{
+                    [[tempMap objectForKey:key] addObject:series];
+                }
             }
         }
         self.seriesMap = @{}.mutableCopy;
         int counter = 0;
+        
         for (NSString* key in tempMap.allKeys) {
             NSMutableArray* array = tempMap[key];
             if (array.count>=2) {
@@ -64,6 +75,9 @@
                 [_seriesMap setObject:array forKey:[NSString stringWithFormat:@"Group - %i",counter]];
             }
         }
+        self.sortedKeyArray = [_seriesMap.allKeys sortedArrayUsingComparator:^NSComparisonResult(NSString* obj1,NSString* obj2) {
+            return [obj1 compare:obj2];
+        }];
     }
     return self;
 }
@@ -273,7 +287,8 @@
 }
 - (id)sourceList:(PXSourceList*)aSourceList child:(NSUInteger)index ofItem:(id)item{
     if (!item) {
-        NSString* key = _seriesMap.allKeys[index];
+//        NSString* key = _seriesMap.allKeys[index];
+        NSString* key = _sortedKeyArray[index];
         return _seriesMap[key]; //Return Array
     }else if ([[item class] isSubclassOfClass:[NSMutableArray class]]){
         NSMutableArray* array = (NSMutableArray*)item;

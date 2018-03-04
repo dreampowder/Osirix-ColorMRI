@@ -34,7 +34,7 @@ void* sopInstanceUIDEncode( NSString *sopuid);
 	
 	NSString	*sopInstanceUID;
     long long   sopInstanceUIDNumber;
-	NSNumber	*inDatabaseFolder;
+	NSNumber	*inDatabaseFolder;  
 	NSNumber	*height, *width;
 	NSNumber	*numberOfFrames;
 	NSNumber	*numberOfSeries;

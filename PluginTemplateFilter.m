@@ -215,6 +215,7 @@
         [self convertPixToRGB:curPix Red:redSeries.sortedImages[curSlice] Green:greenSeries.sortedImages[curSlice] Blue:blueSeries.sortedImages[curSlice]];
         [newViewerController needsDisplayUpdate];
     }
+    [newViewerController becomeFirstResponder];
     [self pressFullDynamicButton];
     
 }

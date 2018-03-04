@@ -8,6 +8,10 @@
 #import <Cocoa/Cocoa.h>
 #import <OsiriXAPI/DicomSeries.h>
 #import <OsiriXAPI/DicomImage.h>
+
+#import "DCMObject.h"
+#import "DCMAttribute.h"
+#import "DCMAttributeTag.h"
 @protocol ImageSetSelectorDelegate
 
 @required
