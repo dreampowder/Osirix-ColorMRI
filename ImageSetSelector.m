@@ -1,6 +1,6 @@
 //
 //  ImageSetSelector.m
-//  NevitColorizer
+//  ColorMRI
 //
 //  Created by Serdar Coskun on 07/12/2017.
 //
@@ -8,17 +8,21 @@
 #import "ImageSetSelector.h"
 #import <Accelerate/Accelerate.h>
 #import <PXSourceList.h>
-
-@interface ImageSetSelector ()<PXSourceListDelegate,PXSourceListDataSource>
+#import "ImageItem.h"
+@interface ImageSetSelector ()<PXSourceListDelegate,PXSourceListDataSource,NSCollectionViewDelegate,NSCollectionViewDataSource>
 
 @property (strong) IBOutlet NSImageView* imgRed;
 @property (strong) IBOutlet NSImageView* imgGreen;
 @property (strong) IBOutlet NSImageView* imgBlue;
 @property (strong) IBOutlet NSImageView* imgSample;
 
-@property (strong) IBOutlet NSPopUpButton* btnRed;
-@property (strong) IBOutlet NSPopUpButton* btnGreen;
-@property (strong) IBOutlet NSPopUpButton* btnBlue;
+//@property (strong) IBOutlet NSPopUpButton* btnRed;
+//@property (strong) IBOutlet NSPopUpButton* btnGreen;
+//@property (strong) IBOutlet NSPopUpButton* btnBlue;
+
+@property (strong) IBOutlet NSCollectionView* collRed;
+@property (strong) IBOutlet NSCollectionView* collGreen;
+@property (strong) IBOutlet NSCollectionView* collBlue;
 
 @property (strong) IBOutlet NSButton* btnSelectSet;
 @property (strong) IBOutlet NSButton* btnApplyColors;
@@ -90,6 +94,24 @@
         NSRunInformationalAlertPanel(@"Image Set Selector", @"There are no compatible image sets available in this study.", @"Ok", 0L, 0L);
         [self.window.sheetParent endSheet:self.window returnCode:NSModalResponseOK];
     }
+    [self setupCollectionView:self.collRed];
+    [self setupCollectionView:self.collGreen];
+    [self setupCollectionView:self.collBlue];
+    
+}
+
+- (void)setupCollectionView:(NSCollectionView*)collectionView{
+    NSCollectionViewFlowLayout* layout = [[NSCollectionViewFlowLayout alloc] init];
+    layout.scrollDirection = NSCollectionViewScrollDirectionHorizontal;
+    layout.itemSize = CGSizeMake(CGRectGetHeight(collectionView.bounds), CGRectGetHeight(collectionView.bounds));
+    layout.minimumInteritemSpacing = 8.0f;
+    [collectionView setCollectionViewLayout:layout];
+    
+    //[collectionView registerNib:[[NSNib alloc] initWithNibNamed:@"ImageItem" bundle:[NSBundle mainBundle]] forItemWithIdentifier:@"ImageItem"];
+//    [collectionView registerClass:[NSCollectionViewItem class] forItemWithIdentifier:@"Cell"];
+    collectionView.delegate = self;
+    collectionView.dataSource = self;
+    
 }
 
 - (void)initializeImageSeries {
@@ -120,15 +142,18 @@
         NSLog(@"R: %@, G:%@, B: %@",series1.name,series2.name,series3.name);
         
         [_outlineView reloadData];
+        [_collRed reloadData];
+        [_collGreen reloadData];
+        [_collBlue reloadData];
     }
 }
 
 - (void)populateRGBButtons{
     
-    [self.btnRed.menu removeAllItems];
-    [self.btnGreen.menu removeAllItems];
-    [self.btnBlue.menu removeAllItems];
-    
+//    [self.btnRed.menu removeAllItems];
+//    [self.btnGreen.menu removeAllItems];
+//    [self.btnBlue.menu removeAllItems];
+
     for (DicomSeries* series in self.seriesArray) {
         NSString* seriesName = [NSString stringWithFormat:@"%@ (%li images)",series.name,series.images.count];
         NSMenuItem* item1 = [[NSMenuItem alloc] initWithTitle:seriesName action:@selector(didSelectMenuItem:) keyEquivalent:@"red"];
@@ -139,32 +164,32 @@
         NSMenuItem* item3 = [[NSMenuItem alloc] initWithTitle:seriesName action:@selector(didSelectMenuItem:) keyEquivalent:@"blue"];
         [item3 setImage:series.thumbnailImage];
         
-        [self.btnRed.menu addItem:item1];
-        [self.btnGreen.menu addItem:item2];
-        [self.btnBlue.menu addItem:item3];
+//        [self.btnRed.menu addItem:item1];
+//        [self.btnGreen.menu addItem:item2];
+//        [self.btnBlue.menu addItem:item3];
     }
-    self.btnRed.menu.title = @"Red Channel";
-    [self.btnRed selectItem:self.btnRed.menu.itemArray[0]];
-    [self.btnGreen selectItem:self.btnRed.menu.itemArray[1]];
-    [self.btnBlue selectItem:self.btnRed.menu.itemArray[self.seriesArray.count>2 ? 2 : 1]];
+//    self.btnRed.menu.title = @"Red Channel";
+//    [self.btnRed selectItem:self.btnRed.menu.itemArray[0]];
+//    [self.btnGreen selectItem:self.btnRed.menu.itemArray[1]];
+//    [self.btnBlue selectItem:self.btnRed.menu.itemArray[self.seriesArray.count>2 ? 2 : 1]];
 }
 
-- (void)didSelectMenuItem:(NSMenuItem*)sender{
-    
-    if ([sender.menu isEqual:self.btnRed.menu]) {
-        self.redSeries = [self selectSeriesWithName:self.btnRed.selectedItem.title];
-    }
-    if ([sender.menu isEqual:self.btnGreen.menu]) {
-        self.greenSeries = [self selectSeriesWithName:self.btnGreen.selectedItem.title];
-    }
-    if ([sender.menu isEqual:self.btnBlue.menu]) {
-        self.blueSeries = [self selectSeriesWithName:self.btnBlue.selectedItem.title];
-    }
-    [self.imgRed setImage:self.redSeries.thumbnailImage];
-    [self.imgGreen setImage:self.greenSeries.thumbnailImage];
-    [self.imgBlue setImage:self.blueSeries.thumbnailImage];
-    [self generateSampleImage];
-}
+//- (void)didSelectMenuItem:(NSMenuItem*)sender{
+//    
+//    if ([sender.menu isEqual:self.btnRed.menu]) {
+//        self.redSeries = [self selectSeriesWithName:self.btnRed.selectedItem.title];
+//    }
+//    if ([sender.menu isEqual:self.btnGreen.menu]) {
+//        self.greenSeries = [self selectSeriesWithName:self.btnGreen.selectedItem.title];
+//    }
+//    if ([sender.menu isEqual:self.btnBlue.menu]) {
+//        self.blueSeries = [self selectSeriesWithName:self.btnBlue.selectedItem.title];
+//    }
+//    [self.imgRed setImage:self.redSeries.thumbnailImage];
+//    [self.imgGreen setImage:self.greenSeries.thumbnailImage];
+//    [self.imgBlue setImage:self.blueSeries.thumbnailImage];
+//    [self generateSampleImage];
+//}
 
 - (DicomSeries*)selectSeriesWithName:(NSString*)name{
     for (DicomSeries* series in self.seriesArray) {
@@ -360,5 +385,40 @@
     [self initializeImageSeries];
     return YES;
 }
+
+#pragma mark NSCollectionViewDatasource
+- (NSInteger)numberOfSectionsInCollectionView:(NSCollectionView *)collectionView{
+    return 1;
+}
+
+- (NSInteger)collectionView:(NSCollectionView *)collectionView numberOfItemsInSection:(NSInteger)section{
+    return self.seriesArray.count;
+}
+
+- (NSCollectionViewItem*)collectionView:(NSCollectionView *)collectionView itemForRepresentedObjectAtIndexPath:(NSIndexPath *)indexPath{
+    ImageItem* cell = (ImageItem*)[collectionView makeItemWithIdentifier:@"ImageItem" forIndexPath:indexPath];
+    DicomSeries* series = self.seriesArray[indexPath.item];
+    cell.imageView.image = series.thumbnailImage;
+    cell.textField.stringValue = series.name;
+    return cell;
+}
+
+- (void)collectionView:(NSCollectionView *)collectionView didSelectItemsAtIndexPaths:(NSSet<NSIndexPath *> *)indexPaths{
+    DicomSeries* series = self.seriesArray[indexPaths.allObjects.firstObject.item];
+    if(collectionView == _collRed){
+        self.redSeries = series;
+        self.imgRed.image = series.thumbnailImage;
+    }else if (collectionView == _collBlue){
+        self.blueSeries = series;
+        self.imgBlue.image = series.thumbnailImage;
+    }else if (collectionView == _collGreen){
+        self.greenSeries = series;
+        self.imgGreen.image = series.thumbnailImage;
+    }
+    NSLog(@"SELECTING IMAGE!");
+    [self generateSampleImage];
+}
+
+
 
 @end

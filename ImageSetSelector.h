@@ -1,6 +1,6 @@
 //
 //  ImageSetSelector.h
-//  NevitColorizer
+//  ColorMRI
 //
 //  Created by Serdar Coskun on 07/12/2017.
 //

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="13771" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13771"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner" customClass="ImageItem">
+            <connections>
+                <outlet property="view" destination="Hz6-mo-xeY" id="yp9-Yx-W3E"/>
+            </connections>
+        </customObject>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <customView id="Hz6-mo-xeY">
+            <rect key="frame" x="0.0" y="0.0" width="480" height="272"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <subviews>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="rDs-xj-mjU">
+                    <rect key="frame" x="6" y="4" width="468" height="17"/>
+                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="Label" id="HQh-bA-Fsa">
+                        <font key="font" metaFont="system"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="V4s-fF-Qeb">
+                    <rect key="frame" x="1" y="22" width="478" height="249"/>
+                    <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" imageFrameStyle="grayBezel" id="LHV-gg-Poo"/>
+                </imageView>
+            </subviews>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="rDs-xj-mjU" secondAttribute="bottom" constant="4" id="5NO-sL-caz"/>
+                <constraint firstAttribute="trailing" secondItem="rDs-xj-mjU" secondAttribute="trailing" constant="8" id="F03-OC-Vmi"/>
+                <constraint firstItem="rDs-xj-mjU" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" constant="8" id="QIi-hm-uyQ"/>
+                <constraint firstItem="V4s-fF-Qeb" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" constant="4" id="RNl-HV-hTD"/>
+                <constraint firstItem="V4s-fF-Qeb" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" constant="4" id="WoK-SQ-B5h"/>
+                <constraint firstItem="rDs-xj-mjU" firstAttribute="top" secondItem="V4s-fF-Qeb" secondAttribute="bottom" constant="4" id="ggq-lb-AVd"/>
+                <constraint firstAttribute="trailing" secondItem="V4s-fF-Qeb" secondAttribute="trailing" constant="4" id="roR-xX-v8R"/>
+            </constraints>
+        </customView>
+        <collectionViewItem id="9pG-XM-ol1" customClass="ImageItem">
+            <connections>
+                <outlet property="imageView" destination="V4s-fF-Qeb" id="TD4-JL-2US"/>
+                <outlet property="textField" destination="rDs-xj-mjU" id="BMK-JQ-zfp"/>
+                <outlet property="view" destination="Hz6-mo-xeY" id="Y4H-x9-lBy"/>
+            </connections>
+        </collectionViewItem>
+    </objects>
+</document>
