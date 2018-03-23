@@ -3,6 +3,7 @@
 
 ---
 
+<p><img src="/documents/osirix-logo.svg" alt="ColorMRI Logo"></p>
 <h1 id="osirix-color-mri-plugin">Osirix Color MRI Plugin</h1>
 <p>An RGB Image Composer Plugin developed for Osirix. The plugin lets users to choose 2 or 3 image sets from the same locations of a patient, and composes them into a single rgb Image Set</p>
 <h2 id="getting-started">Getting Started</h2>
