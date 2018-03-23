@@ -48,11 +48,9 @@
 <li>Serdar Coskun - Developer</li>
 </ul>
 <h2 id="license">License</h2>
-<p>This project is licensed under the MIT License - see the [<a href="http://LICENSE.md">LICENSE.md</a>](<a href="http://LICENSE.md">LICENSE.md</a>) file for details</p>
+<p>This project is licensed under the MIT License - see the [<a href="LICENSE.md">LICENSE.md</a>](<a href="LICENSE.md">LICENSE.md</a>) file for details</p>
 <h2 id="example-outputs-from-the-plugin">Example Outputs from the plugin</h2>
 <p>
-<img src="/documents/photo5850293469665406158.jpg" alt=""><br>
-<img src="/documents/IM-0001-0001_cra.jpg" alt=""><br>
 
 <img src="/documents/Orbita_MRI_02-0009a.jpg" alt=""><br>
 <img src="/documents/Ornek3.jpg" alt=""><br>
@@ -63,3 +61,7 @@
 <img src="/documents/photo5850293469665406161.jpg" alt=""><br>
 <img src="/documents/photo5850293469665406162.jpg" alt=""></p>
 
+<img src="/documents/photo5850293469665406158.jpg" alt=""><br>
+
+<img src="/documents/IM-0001-0001_cra.jpg" alt=""><br>
+Color MRA
