@@ -26,15 +26,16 @@
 </ul>
 <h2 id="minimum">Minimum image requirements</h2>
 <ul>
-<li>In order to make a trichromatic color MRI you need:</li>
-<li>Three series with same Field of view (FOV) and resolution.</li> 
+<li>In order to make a trichromatic color MRI you will need:</li>
+<li>Three series with the same Field of view (FOV) and same resolution.</li> 
 <li>Recommended series are T1 for red channel, T2 for green channel and STIR or T2 Fat sat for blue channel.</li><br>  
 <img src="/documents/MR_Ornekler1a.jpg" alt=""><br>  
 </ul>
 <h2 id="usage">Usage</h2>
 <ul>
 <li>Double click and load the patient:</li>
-<li>Select plugins:Image plugins:Color MRI.</li> 
+<li>Select plugin from Plugins:Image plugins:Color MRI.</li> 
+<li>The lugin will show you possible groupings.</li>
 <li>From possible groupings select one by clicking on a series name.</li>
 <li>Assign series to colors from dropdown menu.</li>
 <li>Click compose.</li><br>  
