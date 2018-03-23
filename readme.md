@@ -1,7 +1,3 @@
----
-
-
----
 
 <p><img src="/documents/osirix-logo.svg" alt="ColorMRI Logo"></p>
 <h1 id="osirix-color-mri-plugin">Osirix Color MRI Plugin</h1>
