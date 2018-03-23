@@ -106,9 +106,6 @@
     layout.itemSize = CGSizeMake(CGRectGetHeight(collectionView.bounds), CGRectGetHeight(collectionView.bounds));
     layout.minimumInteritemSpacing = 8.0f;
     [collectionView setCollectionViewLayout:layout];
-    
-    //[collectionView registerNib:[[NSNib alloc] initWithNibNamed:@"ImageItem" bundle:[NSBundle mainBundle]] forItemWithIdentifier:@"ImageItem"];
-//    [collectionView registerClass:[NSCollectionViewItem class] forItemWithIdentifier:@"Cell"];
     collectionView.delegate = self;
     collectionView.dataSource = self;
     
@@ -419,6 +416,10 @@
     [self generateSampleImage];
 }
 
+- (NSSet<NSIndexPath *> *)collectionView:(NSCollectionView *)collectionView shouldSelectItemsAtIndexPaths:(NSSet<NSIndexPath *> *)indexPaths{
+    NSLog(@"INDEXPATHS: %@",indexPaths.description);
+    return indexPaths;
+}
 
 
 @end

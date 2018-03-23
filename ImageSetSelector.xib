@@ -165,6 +165,7 @@
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
                                                     <color key="primaryBackgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                     <connections>
+                                                        <outlet property="delegate" destination="-2" id="War-jJ-fCE"/>
                                                         <outlet property="itemPrototype" destination="jnE-K0-ia2" id="Y5c-1W-tfD"/>
                                                     </connections>
                                                 </collectionView>
@@ -194,6 +195,7 @@
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
                                                     <color key="primaryBackgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                     <connections>
+                                                        <outlet property="delegate" destination="-2" id="PD2-N5-7IG"/>
                                                         <outlet property="itemPrototype" destination="jnE-K0-ia2" id="PhA-KD-e6F"/>
                                                     </connections>
                                                 </collectionView>
@@ -223,6 +225,7 @@
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
                                                     <color key="primaryBackgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                     <connections>
+                                                        <outlet property="delegate" destination="-2" id="sh2-dj-Upj"/>
                                                         <outlet property="itemPrototype" destination="jnE-K0-ia2" id="D8P-ZR-CiY"/>
                                                     </connections>
                                                 </collectionView>
