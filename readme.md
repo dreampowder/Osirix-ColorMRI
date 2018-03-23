@@ -28,7 +28,7 @@
 <ul>
 <li>In order to make a trichromatic color MRI you need:</li>
 <li>Three series with same Field of view (FOV) and resolution.</li> 
-<li>Recommended series are T1 for red channel, T2 for green channel and STIR or T2 Fat sat for blue channel.</li>
+<li>Recommended series are T1 for red channel, T2 for green channel and STIR or T2 Fat sat for blue channel.</li><br>  
 <img src="/documents/MR_Ornekler1a.jpg" alt=""><br>  
 </ul>
 <h2 id="usage">Usage</h2>
@@ -37,7 +37,8 @@
 <li>Select plugins:Image plugins:Color MRI.</li> 
 <li>From possible groupings select one by clicking on a series name.</li>
 <li>Assign series to colors from dropdown menu.</li>
-<li>Click compose.</li>   
+<li>Click compose.</li><br>  
+<img src="/documents/photo5850293469665406159.jpg" alt=""><br>  
 </ul> 
 <h2 id="contributing">Contributing</h2>
 <p>Please read [<a href="http://CONTRIBUTING.md">CONTRIBUTING.md</a>](<a href="https://gist.github.com/PurpleBooth/b24679402957c63ec426">https://gist.github.com/PurpleBooth/b24679402957c63ec426</a>) for details on our code of conduct, and the process for submitting pull requests to us.</p>
@@ -57,7 +58,7 @@
 <img src="/documents/Ornek3.jpg" alt=""><br>
 <img src="/documents/photo5812225993404951649.jpg" alt=""><br>
 <img src="/documents/photo5812225993404951653.jpg" alt=""><br>
-<img src="/documents/photo5850293469665406159.jpg" alt=""><br>
+
 <img src="/documents/photo5850293469665406160.jpg" alt=""><br>
 <img src="/documents/photo5850293469665406161.jpg" alt=""><br>
 <img src="/documents/photo5850293469665406162.jpg" alt=""></p>
