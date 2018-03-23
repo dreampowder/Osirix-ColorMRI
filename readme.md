@@ -57,9 +57,6 @@
 <img src="/documents/Orbita_MRI_02-0009a.jpg" alt=""><br>
 Axial Orbita Color MRI <br>
 
-<img src="/documents/photo5850293469665406161.jpg" alt=""><br>
-Axial Orbita Color MRI <br>
-
 <img src="/documents/Ornek3.jpg" alt=""><br>
 <img src="/documents/photo5812225993404951649.jpg" alt=""><br>
 <img src="/documents/photo5850293469665406160.jpg" alt=""><br>
