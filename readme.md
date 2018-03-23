@@ -48,7 +48,7 @@
 <li>Serdar Coskun - Developer</li>
 </ul>
 <h2 id="license">License</h2>
-<p>This project is licensed under the MIT License - see the [<a href="LICENSE.md">LICENSE.md</a>](<a href="LICENSE.md">LICENSE.md</a>) file for details</p>
+<p>This project is licensed under the MIT License - see the [<a href="LICENSE">LICENSE</a>] file for details</p>
 <h2 id="example-outputs-from-the-plugin">Example Outputs from the plugin</h2>
 <p>
 
