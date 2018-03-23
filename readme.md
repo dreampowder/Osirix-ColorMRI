@@ -28,7 +28,8 @@
 <ul>
 <li>In order to make a trichromatic color MRI you need:</li>
 <li>Three series with same Field of view (FOV) and resolution.</li> 
-<li>Recommended series are T1 for red channel, T2 for green channel and STIR or T2 Fat sat for blue channel.</li> 
+<li>Recommended series are T1 for red channel, T2 for green channel and STIR or T2 Fat sat for blue channel.</li>
+<img src="/documents/MR_Ornekler1a.jpg" alt=""><br>  
 </ul>
 <h2 id="usage">Usage</h2>
 <ul>
@@ -51,7 +52,7 @@
 <p>
 <img src="/documents/photo5850293469665406158.jpg" alt=""><br>
 <img src="/documents/IM-0001-0001_cra.jpg" alt=""><br>
-<img src="/documents/MR_Ornekler1a.jpg" alt=""><br>
+
 <img src="/documents/Orbita_MRI_02-0009a.jpg" alt=""><br>
 <img src="/documents/Ornek3.jpg" alt=""><br>
 <img src="/documents/photo5812225993404951649.jpg" alt=""><br>
