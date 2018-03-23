@@ -24,6 +24,20 @@
 <li>Once the build process is completed, right click on the  “ColorMRI.osirixplugin” and show in finder to open the file from finder.</li>
 <li>double click on the file to launch Osirix and Install the plugin.</li>
 </ul>
+<h2 id="minimum">Minimum image requirements</h2>
+<ul>
+<li>In order to make a trichromatic color MRI you need:</li>
+<li>Three series with same Field of view (FOV) and resolution.</li> 
+<li>Recommended series are T1 for red channel, T2 for green channel and STIR or T2 Fat sat for blue channel.</li> 
+</ul>
+<h2 id="usage">Usage</h2>
+<ul>
+<li>Double click and load the patient:</li>
+<li>Select plugins:Image plugins:Color MRI.</li> 
+<li>From possible groupings select one by clicking on a series name.</li>
+<li>Assign series to colors from dropdown menu.</li>
+<li>Click compose.</li>   
+</ul> 
 <h2 id="contributing">Contributing</h2>
 <p>Please read [<a href="http://CONTRIBUTING.md">CONTRIBUTING.md</a>](<a href="https://gist.github.com/PurpleBooth/b24679402957c63ec426">https://gist.github.com/PurpleBooth/b24679402957c63ec426</a>) for details on our code of conduct, and the process for submitting pull requests to us.</p>
 <h2 id="authors">Authors</h2>
