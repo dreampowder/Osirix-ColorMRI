@@ -39,7 +39,20 @@
 <li>Assign series to colors from dropdown menu.</li>
 <li>Click compose.</li><br>  
 <img src="/documents/photo5850293469665406159.jpg" alt=""><br>  
-</ul> 
+</ul>
+<h2 id="results">Resulting images</h2>
+<ul>
+<li>Colors of resulting image depends on orginal series used in combination and the order:</li>
+<li>If you follow the recommended series: T1 for red channel, T2 for green channel and STIR or T2 Fat sat for blue channel.</li> 
+<li>Recommended series are T1 for red channel, T2 for green channel and STIR or T2 Fat sat for blue channel.</li><br>  
+<li>Then colors of resulting image would be as follows</li>
+<ul>
+<li>Fat: Yellow</li>
+<li>Water: Cyan/Blue</li>
+<li>Muscle: Dark red</li> 
+<li>Old blood: Red</li> 
+</ul>
+</ul>
 <h2 id="contributing">Contributing</h2>
 <p>Please read [<a href="http://CONTRIBUTING.md">CONTRIBUTING.md</a>](<a href="https://gist.github.com/PurpleBooth/b24679402957c63ec426">https://gist.github.com/PurpleBooth/b24679402957c63ec426</a>) for details on our code of conduct, and the process for submitting pull requests to us.</p>
 <h2 id="authors">Authors</h2>
