@@ -44,8 +44,7 @@
 <ul>
 <li>Colors of resulting image depends on orginal series used in combination and the order:</li>
 <li>If you follow the recommended series: T1 for red channel, T2 for green channel and STIR or T2 Fat sat for blue channel.</li> 
-<li>Recommended series are T1 for red channel, T2 for green channel and STIR or T2 Fat sat for blue channel.</li><br>  
-<li>Then colors of resulting image would be as follows</li>
+<li>Then the colors of resulting image would be as follows</li>
 <ul>
 <li>Fat: Yellow</li>
 <li>Water: Cyan/Blue</li>
