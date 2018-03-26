@@ -91,7 +91,7 @@
     self.outlineView.dataSource = self;
     self.outlineView.delegate = self;
     if (_seriesMap.allKeys.count==0) {
-        NSRunInformationalAlertPanel(@"Image Set Selector", @"There are no compatible image sets available in this study.", @"Ok", 0L, 0L);
+        NSRunInformationalAlertPanel(@"Image Set Selector", @"There are no compatible image sets available in this study. You need at least 2 or 3 series with same slice location and same FOV. See documentation for more info.", @"Ok", 0L, 0L);
         [self.window.sheetParent endSheet:self.window returnCode:NSModalResponseOK];
     }
     [self setupCollectionView:self.collRed];
