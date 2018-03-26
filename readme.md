@@ -38,7 +38,8 @@
 <li>The lugin will show you possible groupings.</li>
 <li>From possible groupings select one by clicking on a series name.</li>
 <li>Assign series to colors from dropdown menu.</li>
-<li>Click compose.</li><br>  
+<li>Click compose.</li><br> 
+ <li><a href="https://github.com/dreampowder/Osirix-ColorMRI/blob/master/documents/Instructions%20for%20Creating%20Color%20MRI.pdf">More detailed Instructions for Creating Color MRI</a></li><br> 
 <img src="/documents/photo5850293469665406159.jpg" alt=""><br>  
 </ul>
 <h2 id="results">Resulting images</h2>
