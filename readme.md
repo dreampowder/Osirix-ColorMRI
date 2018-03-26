@@ -1,7 +1,7 @@
 
 <p><img src="/documents/osirix-logo.svg" alt="ColorMRI Logo"></p>
 <h1 id="osirix-color-mri-plugin">Osirix Color MRI Plugin</h1>
-<p>An RGB Image Composer Plugin developed for Osirix image processing application. The plugin lets users choose 2 or 3 image sets from the same locations of a patient and composes them into a single RGB Image Set.</p>
+<p>An RGB Image Composer Plugin developed for <a href="http://www.osirix-viewer.com/"><Osirix image viewer</a> application. The plugin lets users choose 2 or 3 image sets from the same locations of a patient and composes them into a single RGB Image Set.</p>
 <p><img src="/documents/1280px-Beyoglu_4671_tricolor.jpg" alt="Tricolor Composing"></p>
 <p>you can find much more detailed information from <strong>Dr. Nevit Dilmen</strong>’s documentation : <a href="/documents/Three%20color%20vision%20and%20Color%20MRI.pdf">Three color vision and Color MRI</a></p>
 <h2 id="getting-started">Getting Started</h2>
