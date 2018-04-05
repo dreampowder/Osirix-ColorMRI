@@ -83,3 +83,4 @@ Axial Orbita Color MRI <br>
 
 <img src="/documents/IM-0001-0001_cra.jpg" alt=""><br>
 Color MRA MIP, Arterial phase in red and late phase in blue.</br>
+How to Create Color MRA: step by step instructions. (<a href="https://github.com/dreampowder/Osirix-ColorMRI/blob/master/documents/How%20to%20Create%20Color%20MRA.pdf">View/Download PDF File</a>)
