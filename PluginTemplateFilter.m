@@ -207,7 +207,7 @@
         }
     }
     
-    NSArray *pixList = [newViewerController pixList: 0];
+    NSArray *pixList = [newViewerController pixList];
     for (int i = 0;i<pixList.count;i++) {
         [newViewerController setImageIndex:i];
         int curSlice = [[newViewerController imageView] curImage];
@@ -220,7 +220,7 @@
     
 }
 
-- (unsigned char)convertPixToRGB:(DCMPix*)currentPix
+- (unsigned char*)convertPixToRGB:(DCMPix*)currentPix
                      Red:(DicomImage*)redImg
                    Green:(DicomImage*)greenImg
                     Blue:(DicomImage*)blueImg{
@@ -229,13 +229,13 @@
     [currentPix ConvertToRGB:3 :currentPix.wl :currentPix.ww];
     
     DCMPix* redPix = [DCMPix dcmPixWithImageObj:redImg];
-    [redPix ConvertToRGB:3 :redPix.wl :redPix.ww];
+    [redPix ConvertToRGB:0 :redPix.wl :redPix.ww];
     
     DCMPix* greenPix = [DCMPix dcmPixWithImageObj:greenImg];
-    [greenPix ConvertToRGB:3 :greenPix.wl :greenPix.ww];
+    [greenPix ConvertToRGB:1 :greenPix.wl :greenPix.ww];
     
     DCMPix* bluePix = [DCMPix dcmPixWithImageObj:blueImg];
-    [bluePix ConvertToRGB:3 :bluePix.wl :bluePix.ww];
+    [bluePix ConvertToRGB:2 :bluePix.wl :bluePix.ww];
     
     NSLog(@"current: %f-%f\n\n\nred: %f-%f\n\n\ngreen: %f-%f\n\n\nblur:%f-%f",currentPix.wl,currentPix.ww,redPix.wl,redPix.ww,greenPix.wl,greenPix.ww,bluePix.wl,bluePix.ww);
     

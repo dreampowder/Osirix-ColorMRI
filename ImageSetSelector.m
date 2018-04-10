@@ -393,6 +393,9 @@
     NSIndexPath* selectedIndexPath = indexPaths.allObjects.firstObject;
     ImageItem* cell = (ImageItem*)[collectionView itemAtIndexPath:selectedIndexPath];
     [cell toggleOverlayView:YES];
+    [self.imgRed setNeedsLayout:YES];
+    [self.imgGreen setNeedsLayout:YES];
+    [self.imgBlue setNeedsLayout:YES];
     [self generateSampleImage];
 
 }
