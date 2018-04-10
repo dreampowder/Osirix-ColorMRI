@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="13771" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14109" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13771"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14109"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -29,19 +29,27 @@
                     <rect key="frame" x="1" y="22" width="478" height="249"/>
                     <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" imageFrameStyle="grayBezel" id="LHV-gg-Poo"/>
                 </imageView>
+                <customView focusRingType="none" translatesAutoresizingMaskIntoConstraints="NO" id="WPa-IT-8r5">
+                    <rect key="frame" x="4" y="25" width="472" height="243"/>
+                </customView>
             </subviews>
             <constraints>
                 <constraint firstAttribute="bottom" secondItem="rDs-xj-mjU" secondAttribute="bottom" constant="4" id="5NO-sL-caz"/>
+                <constraint firstItem="WPa-IT-8r5" firstAttribute="leading" secondItem="V4s-fF-Qeb" secondAttribute="leading" id="7D7-nZ-wtK"/>
+                <constraint firstItem="WPa-IT-8r5" firstAttribute="top" secondItem="V4s-fF-Qeb" secondAttribute="top" id="Ae1-U5-hwM"/>
                 <constraint firstAttribute="trailing" secondItem="rDs-xj-mjU" secondAttribute="trailing" constant="8" id="F03-OC-Vmi"/>
                 <constraint firstItem="rDs-xj-mjU" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" constant="8" id="QIi-hm-uyQ"/>
                 <constraint firstItem="V4s-fF-Qeb" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" constant="4" id="RNl-HV-hTD"/>
+                <constraint firstItem="WPa-IT-8r5" firstAttribute="trailing" secondItem="V4s-fF-Qeb" secondAttribute="trailing" id="WMU-70-dWi"/>
                 <constraint firstItem="V4s-fF-Qeb" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" constant="4" id="WoK-SQ-B5h"/>
+                <constraint firstItem="WPa-IT-8r5" firstAttribute="bottom" secondItem="V4s-fF-Qeb" secondAttribute="bottom" id="dtt-dz-5J6"/>
                 <constraint firstItem="rDs-xj-mjU" firstAttribute="top" secondItem="V4s-fF-Qeb" secondAttribute="bottom" constant="4" id="ggq-lb-AVd"/>
                 <constraint firstAttribute="trailing" secondItem="V4s-fF-Qeb" secondAttribute="trailing" constant="4" id="roR-xX-v8R"/>
             </constraints>
         </customView>
         <collectionViewItem id="9pG-XM-ol1" customClass="ImageItem">
             <connections>
+                <outlet property="colorOverlayView" destination="WPa-IT-8r5" id="x8r-fh-6rL"/>
                 <outlet property="imageView" destination="V4s-fF-Qeb" id="TD4-JL-2US"/>
                 <outlet property="textField" destination="rDs-xj-mjU" id="BMK-JQ-zfp"/>
                 <outlet property="view" destination="Hz6-mo-xeY" id="Y4H-x9-lBy"/>

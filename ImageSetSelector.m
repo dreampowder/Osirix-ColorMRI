@@ -9,12 +9,14 @@
 #import <Accelerate/Accelerate.h>
 #import <PXSourceList.h>
 #import "ImageItem.h"
+#import "AspectFillImageView.h"
+
 @interface ImageSetSelector ()<PXSourceListDelegate,PXSourceListDataSource,NSCollectionViewDelegate,NSCollectionViewDataSource>
 
 @property (strong) IBOutlet NSImageView* imgRed;
 @property (strong) IBOutlet NSImageView* imgGreen;
 @property (strong) IBOutlet NSImageView* imgBlue;
-@property (strong) IBOutlet NSImageView* imgSample;
+@property (strong) IBOutlet AspectFillImageView* imgSample;
 
 //@property (strong) IBOutlet NSPopUpButton* btnRed;
 //@property (strong) IBOutlet NSPopUpButton* btnGreen;
@@ -108,6 +110,7 @@
     [collectionView setCollectionViewLayout:layout];
     collectionView.delegate = self;
     collectionView.dataSource = self;
+    [collectionView setSelectable:YES];
     
 }
 
@@ -133,7 +136,6 @@
         [self.imgGreen setNeedsLayout:YES];
         [self.imgBlue setNeedsLayout:YES];
         
-        [self populateRGBButtons];
         [self generateSampleImage];
         
         NSLog(@"R: %@, G:%@, B: %@",series1.name,series2.name,series3.name);
@@ -142,51 +144,9 @@
         [_collRed reloadData];
         [_collGreen reloadData];
         [_collBlue reloadData];
+        
     }
 }
-
-- (void)populateRGBButtons{
-    
-//    [self.btnRed.menu removeAllItems];
-//    [self.btnGreen.menu removeAllItems];
-//    [self.btnBlue.menu removeAllItems];
-
-    for (DicomSeries* series in self.seriesArray) {
-        NSString* seriesName = [NSString stringWithFormat:@"%@ (%li images)",series.name,series.images.count];
-        NSMenuItem* item1 = [[NSMenuItem alloc] initWithTitle:seriesName action:@selector(didSelectMenuItem:) keyEquivalent:@"red"];
-        [item1 setImage:series.thumbnailImage];
-        NSMenuItem* item2 = [[NSMenuItem alloc] initWithTitle:seriesName action:@selector(didSelectMenuItem:) keyEquivalent:@"green"];
-        [item2 setImage:series.thumbnailImage];
-        
-        NSMenuItem* item3 = [[NSMenuItem alloc] initWithTitle:seriesName action:@selector(didSelectMenuItem:) keyEquivalent:@"blue"];
-        [item3 setImage:series.thumbnailImage];
-        
-//        [self.btnRed.menu addItem:item1];
-//        [self.btnGreen.menu addItem:item2];
-//        [self.btnBlue.menu addItem:item3];
-    }
-//    self.btnRed.menu.title = @"Red Channel";
-//    [self.btnRed selectItem:self.btnRed.menu.itemArray[0]];
-//    [self.btnGreen selectItem:self.btnRed.menu.itemArray[1]];
-//    [self.btnBlue selectItem:self.btnRed.menu.itemArray[self.seriesArray.count>2 ? 2 : 1]];
-}
-
-//- (void)didSelectMenuItem:(NSMenuItem*)sender{
-//    
-//    if ([sender.menu isEqual:self.btnRed.menu]) {
-//        self.redSeries = [self selectSeriesWithName:self.btnRed.selectedItem.title];
-//    }
-//    if ([sender.menu isEqual:self.btnGreen.menu]) {
-//        self.greenSeries = [self selectSeriesWithName:self.btnGreen.selectedItem.title];
-//    }
-//    if ([sender.menu isEqual:self.btnBlue.menu]) {
-//        self.blueSeries = [self selectSeriesWithName:self.btnBlue.selectedItem.title];
-//    }
-//    [self.imgRed setImage:self.redSeries.thumbnailImage];
-//    [self.imgGreen setImage:self.greenSeries.thumbnailImage];
-//    [self.imgBlue setImage:self.blueSeries.thumbnailImage];
-//    [self generateSampleImage];
-//}
 
 - (DicomSeries*)selectSeriesWithName:(NSString*)name{
     for (DicomSeries* series in self.seriesArray) {
@@ -209,6 +169,9 @@
     
     self.imgSample.image = [self newImageWithSize:series1.thumbnailImage.size fromRedChannel:redChannel greenChannel:greenChannel blueChannel:blueChannel];
     [self.outlineView reloadData];
+    [_collRed reloadData];
+    [_collGreen reloadData];
+    [_collBlue reloadData];
 }
 
 - (NSImage*)newImageWithSize:(CGSize)size fromRedChannel:(NSData*)redImageData greenChannel:(NSData*)greenImageData blueChannel:(NSData*)blueImageData
@@ -389,7 +352,11 @@
 }
 
 - (NSInteger)collectionView:(NSCollectionView *)collectionView numberOfItemsInSection:(NSInteger)section{
-    return self.seriesArray.count;
+    if(self.redSeries&&self.greenSeries&&self.blueSeries){
+        return self.seriesArray.count;
+    }else{
+        return 0;
+    }
 }
 
 - (NSCollectionViewItem*)collectionView:(NSCollectionView *)collectionView itemForRepresentedObjectAtIndexPath:(NSIndexPath *)indexPath{
@@ -397,6 +364,16 @@
     DicomSeries* series = self.seriesArray[indexPath.item];
     cell.imageView.image = series.thumbnailImage;
     cell.textField.stringValue = series.name;
+    if(collectionView == _collRed){
+        cell.cellColor = NSColor.redColor;
+        [cell toggleOverlayView:[series isEqual:_redSeries]];
+    }else if (collectionView == _collBlue){
+        cell.cellColor = NSColor.blueColor;
+        [cell toggleOverlayView:[series isEqual:_blueSeries]];
+    }else if (collectionView == _collGreen){
+        cell.cellColor = NSColor.greenColor;
+        [cell toggleOverlayView:[series isEqual:_greenSeries]];
+    }
     return cell;
 }
 
@@ -413,13 +390,15 @@
         self.imgGreen.image = series.thumbnailImage;
     }
     NSLog(@"SELECTING IMAGE!");
+    NSIndexPath* selectedIndexPath = indexPaths.allObjects.firstObject;
+    ImageItem* cell = (ImageItem*)[collectionView itemAtIndexPath:selectedIndexPath];
+    [cell toggleOverlayView:YES];
     [self generateSampleImage];
+
 }
 
 - (NSSet<NSIndexPath *> *)collectionView:(NSCollectionView *)collectionView shouldSelectItemsAtIndexPaths:(NSSet<NSIndexPath *> *)indexPaths{
-    NSLog(@"INDEXPATHS: %@",indexPaths.description);
     return indexPaths;
 }
-
 
 @end

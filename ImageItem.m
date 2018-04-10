@@ -15,7 +15,20 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do view setup here.
+    self.view.layer.borderWidth = 0;
+    self.view.layer.borderColor = NSColor.whiteColor.CGColor;
+    self.colorOverlayView.alphaValue = 0.25f;
+    self.colorOverlayView.layer.backgroundColor = NSColor.clearColor.CGColor;
+    
+}
+
+- (void)setOverlayColor:(NSColor*)color{
+    [self.colorOverlayView setWantsLayer:YES];
+    self.colorOverlayView.layer.backgroundColor = color.CGColor;
+}
+
+- (void)toggleOverlayView:(BOOL)enabled{
+    [self setOverlayColor:(enabled)?self.cellColor:NSColor.clearColor];
 }
 
 @end
