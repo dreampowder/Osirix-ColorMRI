@@ -1,2 +1,2 @@
-
+<br>
 Each folder conatinas an anonymized zipped DICOM file. You should be able to  directly import the file into OsiriX without unzipping.  
