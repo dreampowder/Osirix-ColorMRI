@@ -13,6 +13,7 @@
 
 @interface PluginTemplateFilter()<ImageSetSelectorDelegate>
 @property (strong) ImageSetSelector* windowImageSelector;
+@property (assign) BOOL hasErrors;
 @end
 @implementation PluginTemplateFilter
 
@@ -29,7 +30,7 @@
     
     //    ViewerController    *new2DViewer;
     //    new2DViewer = [self duplicateCurrent2DViewerWindow];
-    
+    _hasErrors = NO;
     NSMutableArray<DicomSeries*>* seriesArray = @[].mutableCopy;
     
     BrowserController *currentBrowser = [BrowserController currentBrowser];
@@ -205,18 +206,28 @@
             newViewerController = vc;
             NSLog(@"Set ViewerWindow");
         }
+        [vc setImageIndex:0];
     }
-    
     NSArray *pixList = [newViewerController pixList];
-    for (int i = 0;i<pixList.count;i++) {
-        [newViewerController setImageIndex:i];
-        int curSlice = [[newViewerController imageView] curImage];
-        DCMPix *curPix = [pixList objectAtIndex:curSlice];
-        [self convertPixToRGB:curPix Red:redSeries.sortedImages[curSlice] Green:greenSeries.sortedImages[curSlice] Blue:blueSeries.sortedImages[curSlice]];
-        [newViewerController needsDisplayUpdate];
+    NSArray* sortedRed = redSeries.sortedImages;
+    NSArray* sortedGreen = greenSeries.sortedImages;
+    NSArray* sortedBlue = blueSeries.sortedImages;
+    @autoreleasepool{
+        for (int i = 0;i<pixList.count;i++) {
+            [newViewerController setImageIndex:i];
+            int curSlice = [[newViewerController imageView] curImage];
+            NSLog(@"curSlice: %i, redCount: %li, blueCount:%li, greenCount: %li",curSlice,sortedRed.count,sortedBlue.count,sortedGreen.count);
+            DCMPix *curPix = [pixList objectAtIndex:curSlice];
+            [self convertPixToRGB:curPix Red:sortedRed[curSlice] Green:sortedGreen[curSlice] Blue:sortedBlue[curSlice]];
+            [newViewerController needsDisplayUpdate];
+        }
     }
     [newViewerController becomeFirstResponder];
     [self pressFullDynamicButton];
+    if(_hasErrors){
+        _hasErrors = NO;
+        NSRunInformationalAlertPanel(@"Compose Image", @"We have encountered some problems while composing the image. The result image may look corrupted.", @"Ok", 0L, 0L);
+    }
     
 }
 
@@ -237,21 +248,25 @@
     DCMPix* bluePix = [DCMPix dcmPixWithImageObj:blueImg];
     [bluePix ConvertToRGB:2 :bluePix.wl :bluePix.ww];
     
-    NSLog(@"current: %f-%f\n\n\nred: %f-%f\n\n\ngreen: %f-%f\n\n\nblur:%f-%f",currentPix.wl,currentPix.ww,redPix.wl,redPix.ww,greenPix.wl,greenPix.ww,bluePix.wl,bluePix.ww);
     
+    
+    NSLog(@"current: %ld-%ld\n\n\nred: %ld-%ld\n\n\ngreen: %ld-%ld\n\n\nblur:%ld-%ld",currentPix.pwidth,currentPix.pheight,redPix.pwidth,redPix.pwidth,greenPix.pheight,greenPix.pwidth,bluePix.pheight,bluePix.pwidth);
     unsigned char *rgbImage = (unsigned char*) [currentPix fImage];
-    
     unsigned char *redImage = (unsigned char*) [redPix fImage];
     unsigned char *greenImage = (unsigned char*) [greenPix fImage];
     unsigned char *blueImage = (unsigned char*) [bluePix fImage];
+    
     for (int x = 0; x < [currentPix pwidth]; x++){
         for (int y = 0; y < [currentPix pheight]; y++)
         {
             long curPos = y * [currentPix pwidth] + x;
             // Reading Pixels
-            short redValue = redImage[curPos*4 +1];
-            short greenValue = greenImage[curPos*4 +2];
-            short blueValue = blueImage[curPos*4 +3];
+//                short redValue = redImage[curPos*4 +1];
+//                short greenValue = greenImage[curPos*4 +2];
+//                short blueValue = blueImage[curPos*4 +3];
+            short redValue = [self getValueForFImage:redImage length:redPix.pwidth*redPix.pheight*4 forPosition:(curPos*4 +1) defaultFImage:rgbImage];
+            short greenValue = [self getValueForFImage:greenImage length:greenPix.pwidth*greenPix.pheight*4 forPosition:(curPos*4 +2) defaultFImage:rgbImage];
+            short blueValue = [self getValueForFImage:blueImage length:bluePix.pwidth*bluePix.pheight*40 forPosition:(curPos*4 +3) defaultFImage:rgbImage];
             
             // Writing Pixels
             rgbImage[curPos*4 +1] = redValue;
@@ -259,7 +274,20 @@
             rgbImage[curPos*4 +3] = blueValue;
         }
     }
+    
+    //We return the original image if we encounter any problems
+    rgbImage = (unsigned char*) [currentPix fImage];
     return rgbImage;
+}
+
+//In some cases position gathered from the main image might be greater than the position found in the target image, which couses crash. So if the position is greater than the length, we return the default value (grayscale pixel from the original source)
+- (short)getValueForFImage:(unsigned char*)fImage length:(long)length forPosition:(long)position defaultFImage:(unsigned char*)defautImage{
+    if (length>position) {
+        return fImage[position];
+    }else{
+        _hasErrors = YES;
+        return defautImage[position];
+    }
 }
 
 //The easiest way to accomplist zero key press is to send default "0" keypress to the system for "Full Dynamic"

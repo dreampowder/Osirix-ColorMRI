@@ -8,7 +8,6 @@
 #import "ImageSetSelector.h"
 #import <Accelerate/Accelerate.h>
 #import <PXSourceList.h>
-#import "ImageItem.h"
 #import "AspectFillImageView.h"
 
 @interface ImageSetSelector ()<PXSourceListDelegate,PXSourceListDataSource,NSCollectionViewDelegate,NSCollectionViewDataSource>
@@ -18,15 +17,14 @@
 @property (strong) IBOutlet NSImageView* imgBlue;
 @property (strong) IBOutlet AspectFillImageView* imgSample;
 
-//@property (strong) IBOutlet NSPopUpButton* btnRed;
-//@property (strong) IBOutlet NSPopUpButton* btnGreen;
-//@property (strong) IBOutlet NSPopUpButton* btnBlue;
+@property (strong) IBOutlet NSPopUpButton* btnRed;
+@property (strong) IBOutlet NSPopUpButton* btnGreen;
+@property (strong) IBOutlet NSPopUpButton* btnBlue;
 
-@property (strong) IBOutlet NSCollectionView* collRed;
-@property (strong) IBOutlet NSCollectionView* collGreen;
-@property (strong) IBOutlet NSCollectionView* collBlue;
+@property (strong) IBOutlet NSTextField* lblRed;
+@property (strong) IBOutlet NSTextField* lblGreen;
+@property (strong) IBOutlet NSTextField* lblBlue;
 
-@property (strong) IBOutlet NSButton* btnSelectSet;
 @property (strong) IBOutlet NSButton* btnApplyColors;
 
 @property (strong) IBOutlet PXSourceList* outlineView;
@@ -41,8 +39,6 @@
 @property (strong) DicomSeries* greenSeries;
 @property (strong) DicomSeries* blueSeries;
 
-@property (strong) ImageItem* itemPrototype;
-
 @end
 
 @implementation ImageSetSelector
@@ -54,18 +50,15 @@
         NSMutableDictionary<NSString*,NSMutableArray<DicomSeries*>*>* tempMap =@{}.mutableCopy;
         for(DicomSeries* series in  seriesArray){
             DicomImage* image = series.sortedImages.firstObject;
-//            NSLog(@"IMAGE LOCATION: %@",image.);
-//            NSString* key = [NSString stringWithFormat:@"R:%li Num:%li-res:%f-%f",series.rotationAngle.integerValue,series.numberOfImages.integerValue,image.width.doubleValue,image.height.doubleValue];
             DCMObject* dicomObject = [DCMObject objectWithContentsOfFile:image.completePath decodingPixelData:false];
             DCMAttributeTag* pOrientationTag = [DCMAttributeTag tagWithName:@"ImageOrientationPatient"];
             DCMAttributeTag* pImagePosition = [DCMAttributeTag tagWithName:@"ImagePositionPatient"];
             
             NSString* orientation = [[dicomObject attributeForTag:pOrientationTag] value];
             NSString* position = [[dicomObject attributeForTag:pImagePosition] value];
-            
-            NSLog(@">>>>> Orientation : %@, position: %@",orientation,position);
+            NSString* resolution = [NSString stringWithFormat:@"%li-%li",image.width.longValue, image.height.longValue];
             if (orientation&&position){ //These values must be present, if not, don't add them to the list.
-                NSString* key = [NSString stringWithFormat:@"Loc:%@ - Pos:%@ - Ori:%@ - num:%@",image.sliceLocation,position,orientation,series.numberOfImages];
+                NSString* key = [NSString stringWithFormat:@"Loc:%@ - Pos:%@ - Ori:%@ - num:%@ - res:%@",image.sliceLocation,position,orientation,series.numberOfImages,resolution];
                 if(![tempMap.allKeys containsObject:key]){
                     [tempMap setObject:@[series].mutableCopy forKey:key];
                 }else{
@@ -87,6 +80,9 @@
             return [obj1 compare:obj2];
         }];
     }
+    _lblRed.stringValue = @"R:";
+    _lblGreen.stringValue = @"G:";
+    _lblBlue.stringValue = @"B:";
     return self;
 }
 
@@ -98,26 +94,8 @@
         NSRunInformationalAlertPanel(@"Image Set Selector", @"There are no compatible image sets available in this study. You need at least 2 or 3 series with same slice location and same FOV. See documentation for more info.", @"Ok", 0L, 0L);
         [self.window.sheetParent endSheet:self.window returnCode:NSModalResponseOK];
     }
-    
-    self.itemPrototype = [ImageItem new];
-    [self setupCollectionView:self.collRed];
-    [self setupCollectionView:self.collGreen];
-    [self setupCollectionView:self.collBlue];
-    
 }
 
-- (void)setupCollectionView:(NSCollectionView*)collectionView{
-    //NSCollectionViewFlowLayout* layout = [[NSCollectionViewFlowLayout alloc] init];
-    //layout.scrollDirection = NSCollectionViewScrollDirectionHorizontal;
-    //layout.itemSize = CGSizeMake(CGRectGetHeight(collectionView.bounds), CGRectGetHeight(collectionView.bounds));
-    //layout.minimumInteritemSpacing = 8.0f;
-    //[collectionView setCollectionViewLayout:layout];
-    
-//    collectionView.delegate = self;
-//    collectionView.dataSource = self;
-//    [collectionView setSelectable:YES];
-//    [collectionView setItemPrototype:self.itemPrototype];
-}
 
 - (void)initializeImageSeries {
     
@@ -142,19 +120,13 @@
         [self.imgBlue setNeedsLayout:YES];
         
         [self generateSampleImage];
-        
-        NSLog(@"R: %@, G:%@, B: %@",series1.name,series2.name,series3.name);
+        [self populateRGBButtons];
         
         [_outlineView reloadData];
-
-        NSMutableArray* contentArray = @[].mutableCopy;
-        for (DicomSeries* series in self.seriesArray) {
-            [contentArray addObject:@{@"image":series.thumbnail,@"title":series.name}];
-        }
-        NSLog(@"Content: %@",contentArray);
-        [_collRed setContent:contentArray];
-        [_collBlue setContent:contentArray];
-        [_collGreen setContent:contentArray];
+        
+        
+        
+        
     }
 }
 
@@ -179,84 +151,58 @@
     
     self.imgSample.image = [self newImageWithSize:series1.thumbnailImage.size fromRedChannel:redChannel greenChannel:greenChannel blueChannel:blueChannel];
     [self.outlineView reloadData];
-//    [_collRed reloadData];
-//    [_collGreen reloadData];
-//    [_collBlue reloadData];
+    [self populateLabels];
+    
 }
 
-- (NSImage*)newImageWithSize:(CGSize)size fromRedChannel:(NSData*)redImageData greenChannel:(NSData*)greenImageData blueChannel:(NSData*)blueImageData
-{
-    vImage_Buffer redBuffer;
-    redBuffer.data = (void*)redImageData.bytes;
-    redBuffer.width = size.width;
-    redBuffer.height = size.height;
-    redBuffer.rowBytes = [redImageData length]/size.height;
+- (void)populateRGBButtons{
     
-    vImage_Buffer greenBuffer;
-    greenBuffer.data = (void*)greenImageData.bytes;
-    greenBuffer.width = size.width;
-    greenBuffer.height = size.height;
-    greenBuffer.rowBytes = [greenImageData length]/size.height;
+    [self.btnRed.menu removeAllItems];
+    [self.btnGreen.menu removeAllItems];
+    [self.btnBlue.menu removeAllItems];
     
-    vImage_Buffer blueBuffer;
-    blueBuffer.data = (void*)blueImageData.bytes;
-    blueBuffer.width = size.width;
-    blueBuffer.height = size.height;
-    blueBuffer.rowBytes = [blueImageData length]/size.height;
-    
-    size_t destinationImageBytesLength = size.width*size.height*3;
-    const void* destinationImageBytes = valloc(destinationImageBytesLength);
-    NSData* destinationImageData = [[NSData alloc] initWithBytes:destinationImageBytes length:destinationImageBytesLength];
-    vImage_Buffer destinationBuffer;
-    destinationBuffer.data = (void*)destinationImageData.bytes;
-    destinationBuffer.width = size.width;
-    destinationBuffer.height = size.height;
-    destinationBuffer.rowBytes = [destinationImageData length]/size.height;
-    
-    vImage_Error result = vImageConvert_Planar8toRGB888(&redBuffer, &greenBuffer, &blueBuffer, &destinationBuffer, 0);
-    NSImage* image = nil;
-    if(result == kvImageNoError)
-    {
-        //TODO: If you need color matching, use an appropriate colorspace here
-        CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-        CGDataProviderRef dataProvider = CGDataProviderCreateWithCFData((__bridge CFDataRef)(destinationImageData));
-        CGImageRef finalImageRef = CGImageCreate(size.width, size.height, 8, 24, destinationBuffer.rowBytes, colorSpace, kCGBitmapByteOrder32Big|kCGImageAlphaNone, dataProvider, NULL, NO, kCGRenderingIntentDefault);
-        CGColorSpaceRelease(colorSpace);
-        CGDataProviderRelease(dataProvider);
-        image = [[NSImage alloc] initWithCGImage:finalImageRef size:NSMakeSize(size.width, size.height)];
-        CGImageRelease(finalImageRef);
+    for (DicomSeries* series in self.seriesArray) {
+        NSString* seriesName = [NSString stringWithFormat:@"%@ (%li images)",series.name,series.images.count];
+        NSMenuItem* item1 = [[NSMenuItem alloc] initWithTitle:seriesName action:@selector(didSelectMenuItem:) keyEquivalent:@"red"];
+        [item1 setImage:series.thumbnailImage];
+        NSMenuItem* item2 = [[NSMenuItem alloc] initWithTitle:seriesName action:@selector(didSelectMenuItem:) keyEquivalent:@"green"];
+        [item2 setImage:series.thumbnailImage];
+        
+        NSMenuItem* item3 = [[NSMenuItem alloc] initWithTitle:seriesName action:@selector(didSelectMenuItem:) keyEquivalent:@"blue"];
+        [item3 setImage:series.thumbnailImage];
+        
+        [self.btnRed.menu addItem:item1];
+        [self.btnGreen.menu addItem:item2];
+        [self.btnBlue.menu addItem:item3];
     }
-    free((void*)destinationImageBytes);
-    return image;
+    self.btnRed.menu.title = @"Red Channel";
+    [self.btnRed selectItem:self.btnRed.menu.itemArray[0]];
+    [self.btnGreen selectItem:self.btnRed.menu.itemArray[1]];
+    [self.btnBlue selectItem:self.btnRed.menu.itemArray[self.seriesArray.count>2 ? 2 : 1]];
 }
 
-- (NSData*)channelDataFromImage:(NSImage*)sourceImage
-{
-    CGImageSourceRef imageSource = CGImageSourceCreateWithData((CFDataRef)[sourceImage TIFFRepresentation], NULL);
-    if(imageSource == NULL){return NULL;}
-    CGImageRef image = CGImageSourceCreateImageAtIndex(imageSource, 0, NULL);
-    CFRelease(imageSource);
-    if(image == NULL){return NULL;}
-    CGColorSpaceRef colorSpace = CGImageGetColorSpace(image);
-    CGFloat width = CGImageGetWidth(image);
-    CGFloat height = CGImageGetHeight(image);
-    size_t bytesPerRow = CGImageGetBytesPerRow(image);
-    CGBitmapInfo bitmapInfo = CGImageGetBitmapInfo(image);
-    CGContextRef bitmapContext = CGBitmapContextCreate(NULL, width, height, 8, bytesPerRow, colorSpace, bitmapInfo);
-    NSData* data = NULL;
-    if(NULL != bitmapContext)
-    {
-        CGContextDrawImage(bitmapContext, CGRectMake(0.0, 0.0, width, height), image);
-        CGImageRef imageRef = CGBitmapContextCreateImage(bitmapContext);
-        if(NULL != imageRef)
-        {
-            data = (NSData*)CFBridgingRelease(CGDataProviderCopyData(CGImageGetDataProvider(imageRef)));
-        }
-        CGImageRelease(imageRef);
-        CGContextRelease(bitmapContext);
+- (void)populateLabels{
+    _lblRed.stringValue = [NSString stringWithFormat:@"R: %@",self.redSeries.name];
+    _lblGreen.stringValue = [NSString stringWithFormat:@"G: %@",self.greenSeries.name];
+    _lblBlue.stringValue = [NSString stringWithFormat:@"B: %@",self.blueSeries.name];
+}
+
+- (void)didSelectMenuItem:(NSMenuItem*)sender{
+    
+    if ([sender.menu isEqual:self.btnRed.menu]) {
+        self.redSeries = [self selectSeriesWithName:self.btnRed.selectedItem.title];
     }
-    CGImageRelease(image);
-    return data;
+    if ([sender.menu isEqual:self.btnGreen.menu]) {
+        self.greenSeries = [self selectSeriesWithName:self.btnGreen.selectedItem.title];
+    }
+    if ([sender.menu isEqual:self.btnBlue.menu]) {
+        self.blueSeries = [self selectSeriesWithName:self.btnBlue.selectedItem.title];
+    }
+    [self.imgRed setImage:self.redSeries.thumbnailImage];
+    [self.imgGreen setImage:self.greenSeries.thumbnailImage];
+    [self.imgBlue setImage:self.blueSeries.thumbnailImage];
+    [self generateSampleImage];
+    
 }
 
 - (IBAction)didClickDoneButton:(id)sender{
@@ -356,62 +302,81 @@
     return YES;
 }
 
-#pragma mark NSCollectionViewDatasource
-- (NSInteger)numberOfSectionsInCollectionView:(NSCollectionView *)collectionView{
-    return 1;
-}
+#pragma mark utility methods
 
-- (NSInteger)collectionView:(NSCollectionView *)collectionView numberOfItemsInSection:(NSInteger)section{
-    if(self.redSeries&&self.greenSeries&&self.blueSeries){
-        return self.seriesArray.count;
-    }else{
-        return 0;
+- (NSImage*)newImageWithSize:(CGSize)size fromRedChannel:(NSData*)redImageData greenChannel:(NSData*)greenImageData blueChannel:(NSData*)blueImageData
+{
+    vImage_Buffer redBuffer;
+    redBuffer.data = (void*)redImageData.bytes;
+    redBuffer.width = size.width;
+    redBuffer.height = size.height;
+    redBuffer.rowBytes = [redImageData length]/size.height;
+    
+    vImage_Buffer greenBuffer;
+    greenBuffer.data = (void*)greenImageData.bytes;
+    greenBuffer.width = size.width;
+    greenBuffer.height = size.height;
+    greenBuffer.rowBytes = [greenImageData length]/size.height;
+    
+    vImage_Buffer blueBuffer;
+    blueBuffer.data = (void*)blueImageData.bytes;
+    blueBuffer.width = size.width;
+    blueBuffer.height = size.height;
+    blueBuffer.rowBytes = [blueImageData length]/size.height;
+    
+    size_t destinationImageBytesLength = size.width*size.height*3;
+    const void* destinationImageBytes = valloc(destinationImageBytesLength);
+    NSData* destinationImageData = [[NSData alloc] initWithBytes:destinationImageBytes length:destinationImageBytesLength];
+    vImage_Buffer destinationBuffer;
+    destinationBuffer.data = (void*)destinationImageData.bytes;
+    destinationBuffer.width = size.width;
+    destinationBuffer.height = size.height;
+    destinationBuffer.rowBytes = [destinationImageData length]/size.height;
+    
+    vImage_Error result = vImageConvert_Planar8toRGB888(&redBuffer, &greenBuffer, &blueBuffer, &destinationBuffer, 0);
+    NSImage* image = nil;
+    if(result == kvImageNoError)
+    {
+        //TODO: If you need color matching, use an appropriate colorspace here
+        CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+        CGDataProviderRef dataProvider = CGDataProviderCreateWithCFData((__bridge CFDataRef)(destinationImageData));
+        CGImageRef finalImageRef = CGImageCreate(size.width, size.height, 8, 24, destinationBuffer.rowBytes, colorSpace, kCGBitmapByteOrder32Big|kCGImageAlphaNone, dataProvider, NULL, NO, kCGRenderingIntentDefault);
+        CGColorSpaceRelease(colorSpace);
+        CGDataProviderRelease(dataProvider);
+        image = [[NSImage alloc] initWithCGImage:finalImageRef size:NSMakeSize(size.width, size.height)];
+        CGImageRelease(finalImageRef);
     }
+    free((void*)destinationImageBytes);
+    return image;
 }
 
-- (NSCollectionViewItem*)collectionView:(NSCollectionView *)collectionView itemForRepresentedObjectAtIndexPath:(NSIndexPath *)indexPath{
-    ImageItem* cell = (ImageItem*)[collectionView makeItemWithIdentifier:@"ImageItem" forIndexPath:indexPath];
-    DicomSeries* series = self.seriesArray[indexPath.item];
-    cell.imageView.image = series.thumbnailImage;
-    cell.textField.stringValue = series.name;
-    if(collectionView == _collRed){
-        cell.cellColor = NSColor.redColor;
-        [cell toggleOverlayView:[series isEqual:_redSeries]];
-    }else if (collectionView == _collBlue){
-        cell.cellColor = NSColor.blueColor;
-        [cell toggleOverlayView:[series isEqual:_blueSeries]];
-    }else if (collectionView == _collGreen){
-        cell.cellColor = NSColor.greenColor;
-        [cell toggleOverlayView:[series isEqual:_greenSeries]];
+- (NSData*)channelDataFromImage:(NSImage*)sourceImage
+{
+    CGImageSourceRef imageSource = CGImageSourceCreateWithData((CFDataRef)[sourceImage TIFFRepresentation], NULL);
+    if(imageSource == NULL){return NULL;}
+    CGImageRef image = CGImageSourceCreateImageAtIndex(imageSource, 0, NULL);
+    CFRelease(imageSource);
+    if(image == NULL){return NULL;}
+    CGColorSpaceRef colorSpace = CGImageGetColorSpace(image);
+    CGFloat width = CGImageGetWidth(image);
+    CGFloat height = CGImageGetHeight(image);
+    size_t bytesPerRow = CGImageGetBytesPerRow(image);
+    CGBitmapInfo bitmapInfo = CGImageGetBitmapInfo(image);
+    CGContextRef bitmapContext = CGBitmapContextCreate(NULL, width, height, 8, bytesPerRow, colorSpace, bitmapInfo);
+    NSData* data = NULL;
+    if(NULL != bitmapContext)
+    {
+        CGContextDrawImage(bitmapContext, CGRectMake(0.0, 0.0, width, height), image);
+        CGImageRef imageRef = CGBitmapContextCreateImage(bitmapContext);
+        if(NULL != imageRef)
+        {
+            data = (NSData*)CFBridgingRelease(CGDataProviderCopyData(CGImageGetDataProvider(imageRef)));
+        }
+        CGImageRelease(imageRef);
+        CGContextRelease(bitmapContext);
     }
-    return cell;
-}
-
-- (void)collectionView:(NSCollectionView *)collectionView didSelectItemsAtIndexPaths:(NSSet<NSIndexPath *> *)indexPaths{
-    DicomSeries* series = self.seriesArray[indexPaths.allObjects.firstObject.item];
-    if(collectionView == _collRed){
-        self.redSeries = series;
-        self.imgRed.image = series.thumbnailImage;
-    }else if (collectionView == _collBlue){
-        self.blueSeries = series;
-        self.imgBlue.image = series.thumbnailImage;
-    }else if (collectionView == _collGreen){
-        self.greenSeries = series;
-        self.imgGreen.image = series.thumbnailImage;
-    }
-    NSLog(@"SELECTING IMAGE!");
-    NSIndexPath* selectedIndexPath = indexPaths.allObjects.firstObject;
-    ImageItem* cell = (ImageItem*)[collectionView itemAtIndexPath:selectedIndexPath];
-    [cell toggleOverlayView:YES];
-    [self.imgRed setNeedsLayout:YES];
-    [self.imgGreen setNeedsLayout:YES];
-    [self.imgBlue setNeedsLayout:YES];
-    [self generateSampleImage];
-
-}
-
-- (NSSet<NSIndexPath *> *)collectionView:(NSCollectionView *)collectionView shouldSelectItemsAtIndexPaths:(NSSet<NSIndexPath *> *)indexPaths{
-    return indexPaths;
+    CGImageRelease(image);
+    return data;
 }
 
 @end

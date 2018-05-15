@@ -17,9 +17,6 @@
 		00CE79DE204C0FB6009B77A0 /* DCMAttributeTag.h in Headers */ = {isa = PBXBuildFile; fileRef = 00CE79DB204C0FB5009B77A0 /* DCMAttributeTag.h */; };
 		00CE79DF204C0FB6009B77A0 /* DCMAttribute.h in Headers */ = {isa = PBXBuildFile; fileRef = 00CE79DC204C0FB5009B77A0 /* DCMAttribute.h */; };
 		00CE79E0204C0FB6009B77A0 /* DCMObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 00CE79DD204C0FB5009B77A0 /* DCMObject.h */; };
-		00DE23732052CE6500428218 /* ImageItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 00DE23702052CE6500428218 /* ImageItem.h */; };
-		00DE23742052CE6500428218 /* ImageItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 00DE23712052CE6500428218 /* ImageItem.m */; };
-		00DE23752052CE6500428218 /* ImageItem.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00DE23722052CE6500428218 /* ImageItem.xib */; };
 		8420023212E829A200E1E9CE /* OsiriXAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8420023112E829A200E1E9CE /* OsiriXAPI.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		8A34F7AD23D3A438CC25C7BE /* libPods-ColorMRI.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 45A6234F15C75C6BDF9CDF6F /* libPods-ColorMRI.a */; };
 		8D5B49AE048680CD000E48DA /* Osirix ColorMRI_Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = 32DBCF630370AF2F00C91783 /* Osirix ColorMRI_Prefix.pch */; };
@@ -41,9 +38,6 @@
 		00CE79DB204C0FB5009B77A0 /* DCMAttributeTag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCMAttributeTag.h; sourceTree = "<group>"; };
 		00CE79DC204C0FB5009B77A0 /* DCMAttribute.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCMAttribute.h; sourceTree = "<group>"; };
 		00CE79DD204C0FB5009B77A0 /* DCMObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCMObject.h; sourceTree = "<group>"; };
-		00DE23702052CE6500428218 /* ImageItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImageItem.h; sourceTree = "<group>"; };
-		00DE23712052CE6500428218 /* ImageItem.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ImageItem.m; sourceTree = "<group>"; };
-		00DE23722052CE6500428218 /* ImageItem.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ImageItem.xib; sourceTree = "<group>"; };
 		03300A4DA8970D19BC3E24D1 /* Pods-ColorMRI.development.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ColorMRI.development.xcconfig"; path = "Pods/Target Support Files/Pods-ColorMRI/Pods-ColorMRI.development.xcconfig"; sourceTree = "<group>"; };
 		089C1672FE841209C02AAC07 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		089C167EFE841241C02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -76,7 +70,6 @@
 		000AE05E1FD92ADB00228F5D /* Mri Settings View Controller */ = {
 			isa = PBXGroup;
 			children = (
-				00DE23692052C19400428218 /* CollectionViewItem */,
 				000AE0651FD92BE700228F5D /* ImageSetSelector.h */,
 				000AE0661FD92BE700228F5D /* ImageSetSelector.m */,
 				000AE0671FD92BE700228F5D /* ImageSetSelector.xib */,
@@ -92,16 +85,6 @@
 				00CE79DD204C0FB5009B77A0 /* DCMObject.h */,
 			);
 			path = "Additional Dicom Headers";
-			sourceTree = "<group>";
-		};
-		00DE23692052C19400428218 /* CollectionViewItem */ = {
-			isa = PBXGroup;
-			children = (
-				00DE23702052CE6500428218 /* ImageItem.h */,
-				00DE23712052CE6500428218 /* ImageItem.m */,
-				00DE23722052CE6500428218 /* ImageItem.xib */,
-			);
-			name = CollectionViewItem;
 			sourceTree = "<group>";
 		};
 		089C166AFE841209C02AAC07 /* MyNewPlugin */ = {
@@ -219,7 +202,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				00C6643C2065486900ABA94F /* AspectFillImageView.h in Headers */,
-				00DE23732052CE6500428218 /* ImageItem.h in Headers */,
 				8D5B49AE048680CD000E48DA /* Osirix ColorMRI_Prefix.pch in Headers */,
 				000AE0681FD92BE700228F5D /* ImageSetSelector.h in Headers */,
 				00CE79E0204C0FB6009B77A0 /* DCMObject.h in Headers */,
@@ -286,7 +268,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				00DE23752052CE6500428218 /* ImageItem.xib in Resources */,
 				00C6643F20654CC100ABA94F /* compose.png in Resources */,
 				8D5B49B0048680CD000E48DA /* InfoPlist.strings in Resources */,
 				000AE06A1FD92BE700228F5D /* ImageSetSelector.xib in Resources */,
@@ -334,7 +315,6 @@
 			files = (
 				ABA48A670680BB690089EB4F /* PluginTemplateFilter.m in Sources */,
 				00C6643D2065486900ABA94F /* AspectFillImageView.m in Sources */,
-				00DE23742052CE6500428218 /* ImageItem.m in Sources */,
 				000AE0691FD92BE700228F5D /* ImageSetSelector.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
