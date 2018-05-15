@@ -6,17 +6,10 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <customObject id="-2" userLabel="File's Owner" customClass="ImageItem">
-            <connections>
-                <outlet property="imgView" destination="V4s-fF-Qeb" id="no7-UG-B0u"/>
-                <outlet property="overlayView" destination="WPa-IT-8r5" id="RWy-cI-uUQ"/>
-                <outlet property="txtTitle" destination="rDs-xj-mjU" id="bvt-hQ-vpq"/>
-                <outlet property="view" destination="Hz6-mo-xeY" id="yp9-Yx-W3E"/>
-            </connections>
-        </customObject>
+        <customObject id="-2" userLabel="File's Owner" customClass="ImageCell"/>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
-        <customView id="Hz6-mo-xeY">
+        <customView id="Hz6-mo-xeY" customClass="ImageCell">
             <rect key="frame" x="0.0" y="0.0" width="480" height="272"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
@@ -49,6 +42,11 @@
                 <constraint firstItem="rDs-xj-mjU" firstAttribute="top" secondItem="V4s-fF-Qeb" secondAttribute="bottom" constant="4" id="ggq-lb-AVd"/>
                 <constraint firstAttribute="trailing" secondItem="V4s-fF-Qeb" secondAttribute="trailing" constant="4" id="roR-xX-v8R"/>
             </constraints>
+            <connections>
+                <outlet property="colorOverlayView" destination="WPa-IT-8r5" id="X0v-kw-tcZ"/>
+                <outlet property="imageView" destination="V4s-fF-Qeb" id="Psf-QE-Ti5"/>
+                <outlet property="textField" destination="rDs-xj-mjU" id="8DF-tK-Rcf"/>
+            </connections>
         </customView>
     </objects>
 </document>

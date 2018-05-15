@@ -153,7 +153,7 @@
                                             <action selector="didClickDoneButton:" target="-2" id="Nij-NN-dMf"/>
                                         </connections>
                                     </button>
-                                    <scrollView wantsLayer="YES" autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="72d-8I-QoK">
+                                    <scrollView wantsLayer="YES" autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="72d-8I-QoK">
                                         <rect key="frame" x="4" y="303" width="300" height="100"/>
                                         <clipView key="contentView" drawsBackground="NO" id="sFR-LY-ae1">
                                             <rect key="frame" x="1" y="1" width="298" height="98"/>
@@ -176,7 +176,7 @@
                                             <constraint firstAttribute="height" constant="100" id="RdJ-Yg-tAX"/>
                                         </constraints>
                                         <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="vzQ-mC-o8r">
-                                            <rect key="frame" x="1" y="83" width="138" height="16"/>
+                                            <rect key="frame" x="-100" y="-100" width="138" height="16"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </scroller>
                                         <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="J9g-Wo-ij1">

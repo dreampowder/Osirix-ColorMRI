@@ -41,6 +41,8 @@
 @property (strong) DicomSeries* greenSeries;
 @property (strong) DicomSeries* blueSeries;
 
+@property (strong) ImageItem* itemPrototype;
+
 @end
 
 @implementation ImageSetSelector
@@ -96,6 +98,8 @@
         NSRunInformationalAlertPanel(@"Image Set Selector", @"There are no compatible image sets available in this study. You need at least 2 or 3 series with same slice location and same FOV. See documentation for more info.", @"Ok", 0L, 0L);
         [self.window.sheetParent endSheet:self.window returnCode:NSModalResponseOK];
     }
+    
+    self.itemPrototype = [ImageItem new];
     [self setupCollectionView:self.collRed];
     [self setupCollectionView:self.collGreen];
     [self setupCollectionView:self.collBlue];
@@ -103,15 +107,16 @@
 }
 
 - (void)setupCollectionView:(NSCollectionView*)collectionView{
-    NSCollectionViewFlowLayout* layout = [[NSCollectionViewFlowLayout alloc] init];
-    layout.scrollDirection = NSCollectionViewScrollDirectionHorizontal;
-    layout.itemSize = CGSizeMake(CGRectGetHeight(collectionView.bounds), CGRectGetHeight(collectionView.bounds));
-    layout.minimumInteritemSpacing = 8.0f;
-    [collectionView setCollectionViewLayout:layout];
-    collectionView.delegate = self;
-    collectionView.dataSource = self;
-    [collectionView setSelectable:YES];
+    //NSCollectionViewFlowLayout* layout = [[NSCollectionViewFlowLayout alloc] init];
+    //layout.scrollDirection = NSCollectionViewScrollDirectionHorizontal;
+    //layout.itemSize = CGSizeMake(CGRectGetHeight(collectionView.bounds), CGRectGetHeight(collectionView.bounds));
+    //layout.minimumInteritemSpacing = 8.0f;
+    //[collectionView setCollectionViewLayout:layout];
     
+//    collectionView.delegate = self;
+//    collectionView.dataSource = self;
+//    [collectionView setSelectable:YES];
+//    [collectionView setItemPrototype:self.itemPrototype];
 }
 
 - (void)initializeImageSeries {
@@ -141,10 +146,15 @@
         NSLog(@"R: %@, G:%@, B: %@",series1.name,series2.name,series3.name);
         
         [_outlineView reloadData];
-        [_collRed reloadData];
-        [_collGreen reloadData];
-        [_collBlue reloadData];
-        
+
+        NSMutableArray* contentArray = @[].mutableCopy;
+        for (DicomSeries* series in self.seriesArray) {
+            [contentArray addObject:@{@"image":series.thumbnail,@"title":series.name}];
+        }
+        NSLog(@"Content: %@",contentArray);
+        [_collRed setContent:contentArray];
+        [_collBlue setContent:contentArray];
+        [_collGreen setContent:contentArray];
     }
 }
 
@@ -169,9 +179,9 @@
     
     self.imgSample.image = [self newImageWithSize:series1.thumbnailImage.size fromRedChannel:redChannel greenChannel:greenChannel blueChannel:blueChannel];
     [self.outlineView reloadData];
-    [_collRed reloadData];
-    [_collGreen reloadData];
-    [_collBlue reloadData];
+//    [_collRed reloadData];
+//    [_collGreen reloadData];
+//    [_collBlue reloadData];
 }
 
 - (NSImage*)newImageWithSize:(CGSize)size fromRedChannel:(NSData*)redImageData greenChannel:(NSData*)greenImageData blueChannel:(NSData*)blueImageData

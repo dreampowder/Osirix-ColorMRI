@@ -9,6 +9,9 @@
 
 @interface ImageItem ()
 
+@property (nonatomic, retain) IBOutlet NSImageView* imgView;
+@property (nonatomic, retain) IBOutlet NSTextField* txtTitle;
+@property (nonatomic, retain) IBOutlet NSView* overlayView;
 @end
 
 @implementation ImageItem
@@ -29,6 +32,17 @@
 
 - (void)toggleOverlayView:(BOOL)enabled{
     [self setOverlayColor:(enabled)?self.cellColor:NSColor.clearColor];
+}
+
+- (void)setRepresentedObject:(id)representedObject{
+    [super setRepresentedObject:representedObject];
+    if(representedObject){
+        NSImage* image = (NSImage*)[representedObject objectForKey:@"image"];
+        NSString* title = (NSString*)[representedObject objectForKey:@"title"];
+        self.imgView.image = image;
+        self.txtTitle.stringValue = title;
+        NSLog(@"Represented View: %@, %@",image,title);
+    }
 }
 
 @end
