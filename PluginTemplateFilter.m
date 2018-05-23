@@ -197,7 +197,8 @@
 
 - (void)generateRGBSetWithRedChannel:(DicomSeries*)redSeries
                      andGreenChannel:(DicomSeries*)greenSeries
-                      andBlueChannel:(DicomSeries*)blueSeries{
+                      andBlueChannel:(DicomSeries*)blueSeries
+                      isReverseOrder:(BOOL)isReverseOrder{
     
     [[BrowserController currentBrowser] databaseOpenStudy:redSeries];
     ViewerController* newViewerController = nil;
@@ -212,16 +213,20 @@
     NSArray* sortedRed = redSeries.sortedImages;
     NSArray* sortedGreen = greenSeries.sortedImages;
     NSArray* sortedBlue = blueSeries.sortedImages;
+    
     @autoreleasepool{
         for (int i = 0;i<pixList.count;i++) {
+            NSInteger currentIndex = i;
             [newViewerController setImageIndex:i];
-            int curSlice = [[newViewerController imageView] curImage];
-            NSLog(@"curSlice: %i, redCount: %li, blueCount:%li, greenCount: %li",curSlice,sortedRed.count,sortedBlue.count,sortedGreen.count);
-            DCMPix *curPix = [pixList objectAtIndex:curSlice];
+//            int curSlice = [[newViewerController imageView] curImage];
+            NSInteger curSlice = (!isReverseOrder)?i:(pixList.count-i-1);
+            NSLog(@"curSlice: %li,curIndex: %li, redCount: %li, blueCount:%li, greenCount: %li",curSlice,currentIndex,sortedRed.count,sortedBlue.count,sortedGreen.count);
+            DCMPix *curPix = [pixList objectAtIndex:i];
             [self convertPixToRGB:curPix Red:sortedRed[curSlice] Green:sortedGreen[curSlice] Blue:sortedBlue[curSlice]];
             [newViewerController needsDisplayUpdate];
         }
     }
+    
     [newViewerController becomeFirstResponder];
     [self pressFullDynamicButton];
     if(_hasErrors){
@@ -261,12 +266,12 @@
         {
             long curPos = y * [currentPix pwidth] + x;
             // Reading Pixels
-//                short redValue = redImage[curPos*4 +1];
-//                short greenValue = greenImage[curPos*4 +2];
-//                short blueValue = blueImage[curPos*4 +3];
-            short redValue = [self getValueForFImage:redImage length:redPix.pwidth*redPix.pheight*4 forPosition:(curPos*4 +1) defaultFImage:rgbImage];
-            short greenValue = [self getValueForFImage:greenImage length:greenPix.pwidth*greenPix.pheight*4 forPosition:(curPos*4 +2) defaultFImage:rgbImage];
-            short blueValue = [self getValueForFImage:blueImage length:bluePix.pwidth*bluePix.pheight*40 forPosition:(curPos*4 +3) defaultFImage:rgbImage];
+                short redValue = redImage[curPos*4 +1];
+                short greenValue = greenImage[curPos*4 +2];
+                short blueValue = blueImage[curPos*4 +3];
+//            short redValue = [self getValueForFImage:redImage length:redPix.pwidth*redPix.pheight*4 forPosition:(curPos*4 +1) defaultFImage:rgbImage];
+//            short greenValue = [self getValueForFImage:greenImage length:greenPix.pwidth*greenPix.pheight*4 forPosition:(curPos*4 +2) defaultFImage:rgbImage];
+//            short blueValue = [self getValueForFImage:blueImage length:bluePix.pwidth*bluePix.pheight*40 forPosition:(curPos*4 +3) defaultFImage:rgbImage];
             
             // Writing Pixels
             rgbImage[curPos*4 +1] = redValue;
@@ -308,11 +313,11 @@
 
 #pragma mark <ImageSetSelectorDelegate>
 
-- (void)didSelectRedChannel:(DicomSeries *)redSeries greenChannel:(DicomSeries *)greenSeries blueChannel:(DicomSeries *)blueSeries{
+- (void)didSelectRedChannel:(DicomSeries *)redSeries greenChannel:(DicomSeries *)greenSeries blueChannel:(DicomSeries *)blueSeries isReverseOrder:(BOOL)isReverseOrder{
     if (self.windowImageSelector){
         [self.windowImageSelector close];
     }
-    [self generateRGBSetWithRedChannel:redSeries andGreenChannel:greenSeries andBlueChannel:blueSeries];
+    [self generateRGBSetWithRedChannel:redSeries andGreenChannel:greenSeries andBlueChannel:blueSeries isReverseOrder:isReverseOrder];
 }
 
 

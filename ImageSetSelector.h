@@ -17,7 +17,8 @@
 @required
 - (void)didSelectRedChannel:(DicomSeries*)redSeries
                greenChannel:(DicomSeries*)greenSeries
-                blueChannel:(DicomSeries*)blueSeries;
+                blueChannel:(DicomSeries*)blueSeries
+             isReverseOrder:(BOOL)isReverseOrder;
 
 @end
 
